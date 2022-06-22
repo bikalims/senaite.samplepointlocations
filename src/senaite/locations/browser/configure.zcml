@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="senaite.locations">
+
+  <!-- Set overrides folder for Just-a-Bunch-Of-Templates product -->
+  <include package="z3c.jbot" file="meta.zcml" />
+  <browser:jbot
+      directory="overrides"
+      layer="senaite.locations.interfaces.ISenaiteLocationsLayer"
+      />
+
+  <!-- Publish static files -->
+  <plone:static
+      name="senaite.locations"
+      type="plone"
+      directory="static"
+      />
+
+</configure>

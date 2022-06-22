@@ -1,0 +1,5 @@
+=================
+senaite.locations
+=================
+
+User documentation
