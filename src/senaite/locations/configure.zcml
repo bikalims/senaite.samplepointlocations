@@ -19,21 +19,30 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="senaite.locations"
+      title="SENAITE LOCATIONS"
       directory="profiles/default"
       description="Installs the senaite.locations add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      pre_handler=".setuphandlers.pre_install"
       post_handler=".setuphandlers.post_install"
       />
 
   <genericsetup:registerProfile
       name="uninstall"
-      title="senaite.locations (uninstall)"
+      title="SENAITE LOCATIONS (uninstall)"
       directory="profiles/uninstall"
       description="Uninstalls the senaite.locations add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      post_handler=".setuphandlers.uninstall"
+      post_handler=".setuphandlers.post_uninstall"
       />
+
+  <genericsetup:importStep
+    name="senaite.locations.setup_handler"
+    title="SENAITE LOCATIONS: Setup Handler"
+    description="Run various configuration actions"
+    handler=".setuphandlers.setup_handler">
+    <depends name="typeinfo"/>
+  </genericsetup:importStep>
 
   <utility
       factory=".setuphandlers.HiddenProfiles"
