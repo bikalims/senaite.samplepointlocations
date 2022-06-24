@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from bika.lims.interfaces import IDeactivable
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from senaite.core.catalog import SETUP_CATALOG
@@ -13,7 +14,7 @@ class ILocation(model.Schema):
     address = schema.TextLine(title=_(u"Address"), required=False)
 
 
-@implementer(ILocation)
+@implementer(ILocation, IDeactivable)
 class Location(Container):
     """Content-type class for ILocation"""
 

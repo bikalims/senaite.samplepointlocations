@@ -18,4 +18,12 @@
       directory="static"
       />
 
+  <browser:page
+    for="bika.lims.interfaces.IClient"
+    name="locations"
+    class=".locations.LocationsView"
+    permission="senaite.core.permissions.ManageBika"
+    layer="senaite.locations.interfaces.ISenaiteLocationsLayer"/>
+
+
 </configure>

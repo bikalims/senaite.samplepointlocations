@@ -3,9 +3,12 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="senaite.locations">
 
   <i18n:registerTranslations directory="locales" />
+
+  <five:registerPackage package="." initialize=".initialize"/>
 
   <!--
     Be careful if you use general includeDependencies, it can have side effects!
@@ -15,6 +18,10 @@
 
   <include package=".browser" />
 
+  <!-- Import senaite.core permissions -->
+  <include package="bika.lims" file="permissions.zcml" />
+
+  <!-- Import senaite.locations permissions -->
   <include file="permissions.zcml" />
 
   <genericsetup:registerProfile
