@@ -3,6 +3,8 @@
 from AccessControl.Permission import addPermission
 from AccessControl.SecurityInfo import ModuleSecurityInfo
 import logging
+from senaite.api import get_request
+from senaite.locations.interfaces import ISenaiteLocationsLayer
 from senaite.locations import permissions
 from zope.i18nmessageid import MessageFactory
 
@@ -16,6 +18,12 @@ DEFAULT_TYPES = ("Location",)
 logger = logging.getLogger(PRODUCT_NAME)
 
 _ = MessageFactory(PRODUCT_NAME)
+
+
+def is_installed():
+    """Returns whether the product is installed or not"""
+    request = get_request()
+    return ISenaiteLocationsLayer.providedBy(request)
 
 
 def initialize(context):

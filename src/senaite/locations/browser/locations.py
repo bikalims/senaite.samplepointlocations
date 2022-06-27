@@ -1,7 +1,6 @@
 import collections
 
 from bika.lims import api
-from bika.lims import bikaMessageFactory as _b
 from bika.lims.utils import get_link
 from senaite.app.listing import ListingView
 from senaite.core.catalog import SETUP_CATALOG

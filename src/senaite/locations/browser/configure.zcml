@@ -25,5 +25,6 @@
     permission="senaite.core.permissions.ManageBika"
     layer="senaite.locations.interfaces.ISenaiteLocationsLayer"/>
 
+  <include package=".listingview"/>
 
 </configure>

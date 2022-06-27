@@ -21,8 +21,9 @@
   <!-- Import senaite.core permissions -->
   <include package="bika.lims" file="permissions.zcml" />
 
-  <!-- Import senaite.locations permissions -->
+  <include file="indexers.zcml" />
   <include file="permissions.zcml" />
+  <include package=".extenders"/>
 
   <genericsetup:registerProfile
       name="default"
