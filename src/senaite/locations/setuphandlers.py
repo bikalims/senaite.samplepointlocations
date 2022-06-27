@@ -5,6 +5,8 @@ from senaite.locations import logger
 from senaite.locations import PRODUCT_NAME
 from senaite.locations import PROFILE_ID
 from senaite.core.catalog import SAMPLE_CATALOG
+
+from senaite.core.setuphandlers import _run_import_step
 from senaite.core.setuphandlers import setup_other_catalogs
 from zope.component import getUtility
 from zope.interface import implementer
@@ -79,6 +81,7 @@ def post_install(portal_setup):
     context = portal_setup._getImportContext(PROFILE_ID)  # noqa
     portal = context.getSite()  # noqa
 
+    _run_import_step(portal, "workflow", PROFILE_ID)
     logger.info("{} install handler [DONE]".format(PRODUCT_NAME.upper()))
 
 
