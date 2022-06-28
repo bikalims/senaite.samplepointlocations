@@ -5,6 +5,7 @@
         xmlns="http://namespaces.zope.org/zope">
 
     <adapter name="getLocation" factory=".indexers.ar_location_title"/>
+    <adapter name="getSamplePointLocation" factory=".indexers.sp_location_title"/>
 
 </configure>
 

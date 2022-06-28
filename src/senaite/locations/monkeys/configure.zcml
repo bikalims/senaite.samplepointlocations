@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    i18n_domain="senaite.locations">
+
+  <monkey:patch
+    description="Get AR location"
+    class="bika.lims.content.analysisrequest.AnalysisRequest"
+    original="getLocation"
+    ignoreOriginal="True"
+    replacement=".analysisrequest.getLocation" />
+
+  <monkey:patch
+    description="Get samplepoint location"
+    class="bika.lims.content.samplepoint.SamplePoint"
+    original="getSamplePointLocation"
+    ignoreOriginal="True"
+    replacement=".samplepoint.getSamplePointLocation" />
+
+</configure>
+

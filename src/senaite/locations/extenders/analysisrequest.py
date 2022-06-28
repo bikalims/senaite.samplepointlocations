@@ -20,12 +20,15 @@ location_field = ExtReferenceField(
     mode="rw",
     read_permission=View,
     write_permission=FieldEditContact,
+    # accessor="getLocation",
+    # edit_accessor="getLocation",
+    # mutator="setLocation",
     widget=ReferenceWidget(
         label=_(u"Sample Point Location"),
         render_own_label=True,
         size=20,
         catalog_name=SETUP_CATALOG,
-        base_query={"sort_on": "sortable_title"},
+        base_query={"sort_on": "sortable_title", "is_active": True},
         showOn=True,
         visible={
             "add": "edit",

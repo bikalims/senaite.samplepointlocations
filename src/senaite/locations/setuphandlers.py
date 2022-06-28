@@ -29,7 +29,7 @@ NAVTYPES = [
 ID_FORMATTING = [
     {
         "portal_type": "Location",
-        "form": "Loc{seq:06d}",
+        "form": "SPL{seq:06d}",
         "prefix": "location",
         "sequence_type": "generated",
         "counter_type": "",
