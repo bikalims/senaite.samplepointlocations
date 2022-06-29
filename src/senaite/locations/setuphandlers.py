@@ -5,7 +5,6 @@ from senaite.locations import logger
 from senaite.locations import PRODUCT_NAME
 from senaite.locations import PROFILE_ID
 from senaite.core.catalog import SAMPLE_CATALOG
-
 from senaite.core.setuphandlers import _run_import_step
 from senaite.core.setuphandlers import setup_other_catalogs
 from zope.component import getUtility
