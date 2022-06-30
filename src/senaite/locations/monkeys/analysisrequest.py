@@ -54,52 +54,6 @@ def get_client_info(self, obj):
     return info
 
 
-def get_sampletype_info(self, obj):
-    """Returns the info for a Sample Type"""
-    info = self.get_base_info(obj)
-
-    # client
-    client = self.get_client()
-    client_uid = client and api.get_uid(client) or ""
-
-    info.update(
-        {
-            "prefix": obj.getPrefix(),
-            "minimum_volume": obj.getMinimumVolume(),
-            "hazardous": obj.getHazardous(),
-            "retention_period": obj.getRetentionPeriod(),
-        }
-    )
-
-    # catalog queries for UI field filtering
-    sample_type_uid = api.get_uid(obj)
-    filter_queries = {
-        # Display Sample Points that have this sample type assigned plus
-        # those that do not have a sample type assigned
-        "SamplePoint": {
-            "sampletype_uid": [sample_type_uid, None],
-            "getClientUID": [client_uid, ""],
-        },
-        # Display Specifications that have this sample type assigned only
-        "Specification": {
-            "sampletype_uid": sample_type_uid,
-            "getClientUID": [client_uid, ""],
-        },
-        # Display Location that have this sample type assigned only
-        "Location": {
-            "getClientUID": [client_uid],
-        },
-        # Display AR Templates that have this sample type assigned plus
-        # those that do not have a sample type assigned
-        "Template": {
-            "sampletype_uid": [sample_type_uid, None],
-            "getClientUID": [client_uid, ""],
-        },
-    }
-    info["filter_queries"] = filter_queries
-    return info
-
-
 @check_installed(None)
 def getLocation(self):  # noqa camelcase
     """Returns the AR's location"""
