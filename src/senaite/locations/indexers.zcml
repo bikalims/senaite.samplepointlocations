@@ -7,6 +7,7 @@
     <adapter name="getClientUID" factory=".indexers.location_client_uid"/>
     <adapter name="getLocation" factory=".indexers.ar_location_title"/>
     <adapter name="getSamplePointLocation" factory=".indexers.sp_location_title"/>
+    <adapter name="getSamplePointLocationUID" factory=".indexers.sp_location_uid"/>
 
 </configure>
 

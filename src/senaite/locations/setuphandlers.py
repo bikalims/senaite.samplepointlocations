@@ -5,6 +5,7 @@ from senaite.locations import logger
 from senaite.locations import PRODUCT_NAME
 from senaite.locations import PROFILE_ID
 from senaite.core.catalog import SAMPLE_CATALOG
+from senaite.core.catalog import SETUP_CATALOG
 from senaite.core.setuphandlers import _run_import_step
 from senaite.core.setuphandlers import setup_other_catalogs
 from zope.component import getUtility
@@ -13,6 +14,8 @@ from zope.interface import implementer
 # Tuples of (catalog, index_name, index_attribute, index_type)
 INDEXES = [
     (SAMPLE_CATALOG, "getLocation", "", "FieldIndex"),
+    (SETUP_CATALOG, "getSamplePointLocation", "", "FieldIndex"),
+    (SETUP_CATALOG, "getSamplePointLocationUID", "", "FieldIndex"),
 ]
 
 # Tuples of (catalog, column_name)

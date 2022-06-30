@@ -26,3 +26,14 @@ def sp_location_title(instance):
         return loc.title if loc else ""
     except Exception:
         return ""
+
+
+@indexer(ISamplePoint)
+def sp_location_uid(instance):
+    try:
+        model = SuperModel(instance)
+        model_data = model.to_dict()
+        loc = get_object_by_uid(model_data["SamplePointLocation"])
+        return loc.UID if loc else ""
+    except Exception:
+        return ""

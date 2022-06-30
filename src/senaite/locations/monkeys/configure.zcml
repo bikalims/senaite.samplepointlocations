@@ -18,11 +18,25 @@
     replacement=".samplepoint.getSamplePointLocation" />
 
   <monkey:patch
-    description="Added Location get_client_info"
+    description="Include Location get_client_info"
     class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
     original="get_client_info"
     ignoreOriginal="True"
     replacement=".analysisrequest.get_client_info" />
+
+  <monkey:patch
+    description="Include location info get_object_info"
+    class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
+    original="get_object_info"
+    ignoreOriginal="True"
+    replacement=".analysisrequest.get_object_info" />
+
+  <monkey:patch
+    description="Sort resulting metadata"
+    class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
+    original="get_record_metadata"
+    ignoreOriginal="True"
+    replacement=".analysisrequest.get_record_metadata" />
 
 </configure>
 
