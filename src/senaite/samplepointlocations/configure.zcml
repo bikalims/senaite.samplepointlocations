@@ -1,0 +1,61 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="senaite.samplepointlocations">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <five:registerPackage package="." initialize=".initialize"/>
+
+  <!--
+    Be careful if you use general includeDependencies, it can have side effects!
+    Better import explicit packages or configurations ;)
+  -->
+  <!--<includeDependencies package="." />-->
+
+  <include package=".browser" />
+
+  <!-- Import senaite.core permissions -->
+  <include package="bika.lims" file="permissions.zcml" />
+
+  <include file="indexers.zcml" />
+  <include file="permissions.zcml" />
+  <include package=".extenders"/>
+  <include package=".monkeys" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="SENAITE SAMPLEPOINTLOCATIONS"
+      directory="profiles/default"
+      description="Installs the senaite.samplepointlocations add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      pre_handler=".setuphandlers.pre_install"
+      post_handler=".setuphandlers.post_install"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="SENAITE SAMPLEPOINTLOCATIONS (uninstall)"
+      directory="profiles/uninstall"
+      description="Uninstalls the senaite.samplepointlocations add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.post_uninstall"
+      />
+
+  <genericsetup:importStep
+    name="senaite.samplepointlocations.setup_handler"
+    title="SENAITE SAMPLEPOINTLOCATIONS: Setup Handler"
+    description="Run various configuration actions"
+    handler=".setuphandlers.setup_handler">
+    <depends name="typeinfo"/>
+  </genericsetup:importStep>
+
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="senaite.samplepointlocations-hiddenprofiles"
+      />
+
+</configure>

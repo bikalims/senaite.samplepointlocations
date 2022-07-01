@@ -1,5 +1,5 @@
 =================
-senaite.locations
+senaite.samplepointlocations
 =================
 
 User documentation

@@ -2,30 +2,30 @@
    If you want to learn more about writing documentation, please check out: http://docs.plone.org/about/documentation_styleguide.html
    This text does not appear on pypi or github. It is a comment.
 
-.. image:: https://travis-ci.org/collective/senaite.locations.svg?branch=master
-    :target: https://travis-ci.org/collective/senaite.locations
+.. image:: https://travis-ci.org/collective/senaite.samplepointlocations.svg?branch=master
+    :target: https://travis-ci.org/collective/senaite.samplepointlocations
 
-.. image:: https://coveralls.io/repos/github/collective/senaite.locations/badge.svg?branch=master
-    :target: https://coveralls.io/github/collective/senaite.locations?branch=master
+.. image:: https://coveralls.io/repos/github/collective/senaite.samplepointlocations/badge.svg?branch=master
+    :target: https://coveralls.io/github/collective/senaite.samplepointlocations?branch=master
     :alt: Coveralls
 
-.. image:: https://img.shields.io/pypi/v/senaite.locations.svg
-    :target: https://pypi.python.org/pypi/senaite.locations/
+.. image:: https://img.shields.io/pypi/v/senaite.samplepointlocations.svg
+    :target: https://pypi.python.org/pypi/senaite.samplepointlocations/
     :alt: Latest Version
 
-.. image:: https://img.shields.io/pypi/status/senaite.locations.svg
-    :target: https://pypi.python.org/pypi/senaite.locations
+.. image:: https://img.shields.io/pypi/status/senaite.samplepointlocations.svg
+    :target: https://pypi.python.org/pypi/senaite.samplepointlocations
     :alt: Egg Status
 
-.. image:: https://img.shields.io/pypi/pyversions/senaite.locations.svg?style=plastic   :alt: Supported - Python Versions
+.. image:: https://img.shields.io/pypi/pyversions/senaite.samplepointlocations.svg?style=plastic   :alt: Supported - Python Versions
 
-.. image:: https://img.shields.io/pypi/l/senaite.locations.svg
-    :target: https://pypi.python.org/pypi/senaite.locations/
+.. image:: https://img.shields.io/pypi/l/senaite.samplepointlocations.svg
+    :target: https://pypi.python.org/pypi/senaite.samplepointlocations/
     :alt: License
 
 
 =================
-senaite.locations
+senaite.samplepointlocations
 =================
 
 Tell me what your product does
@@ -60,14 +60,14 @@ This product has been translated into
 Installation
 ------------
 
-Install senaite.locations by adding it to your buildout::
+Install senaite.samplepointlocations by adding it to your buildout::
 
     [buildout]
 
     ...
 
     eggs =
-        senaite.locations
+        senaite.samplepointlocations
 
 
 and then running ``bin/buildout``
@@ -76,8 +76,8 @@ and then running ``bin/buildout``
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/collective/senaite.locations/issues
-- Source Code: https://github.com/collective/senaite.locations
+- Issue Tracker: https://github.com/collective/senaite.samplepointlocations/issues
+- Source Code: https://github.com/collective/senaite.samplepointlocations
 - Documentation: https://docs.plone.org/foo/bar
 
 

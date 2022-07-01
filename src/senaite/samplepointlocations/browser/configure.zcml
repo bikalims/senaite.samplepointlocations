@@ -1,0 +1,30 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="senaite.samplepointlocations">
+
+  <!-- Set overrides folder for Just-a-Bunch-Of-Templates product -->
+  <include package="z3c.jbot" file="meta.zcml" />
+  <browser:jbot
+      directory="overrides"
+      layer="senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"
+      />
+
+  <!-- Publish static files -->
+  <plone:static
+      name="senaite.samplepointlocations"
+      type="plone"
+      directory="static"
+      />
+
+  <browser:page
+    for="bika.lims.interfaces.IClient"
+    name="samplepointlocations"
+    class=".samplepointlocations.SamplePointLocationsView"
+    permission="senaite.core.permissions.ManageBika"
+    layer="senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"/>
+
+  <include package=".listingview"/>
+
+</configure>

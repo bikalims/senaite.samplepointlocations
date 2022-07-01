@@ -1,0 +1,18 @@
+<configure xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="senaite.samplepointlocations">
+
+    <include package="archetypes.schemaextender"/>
+
+    <adapter name='senaite.samplepointlocations.analysisrequest.schemaextender'
+             provides="archetypes.schemaextender.interfaces.ISchemaExtender"
+             factory=".analysisrequest.AnalysisRequestSchemaExtender"/>
+
+    <adapter name="senaite.samplepointlocations.samplepoint.schemaextended"
+             provides="archetypes.schemaextender.interfaces.ISchemaExtender"
+             factory=".samplepoint.SamplePointSchemaExtender"/>
+
+    <adapter name="senaite.samplepointlocations.samplepoint.schemamodifier"
+             provides="archetypes.schemaextender.interfaces.ISchemaModifier"
+             factory=".samplepoint.SamplePointSchemaModifier"/>
+</configure>
