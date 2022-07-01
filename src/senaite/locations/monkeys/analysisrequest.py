@@ -68,11 +68,7 @@ def get_object_info(self, obj, key, record=None):
     # Check if there is a function to handle objects for this field
     field_name = key.replace("_uid", "")
     func_name = "get_{}_info".format(field_name.lower())
-    logger.info(
-        "+++++++++++++++++++++++++++++++++++++++ get_object_info: func_name = {}".format(
-            func_name
-        )
-    )
+    logger.debug("get_object_info: func_name = {}".format(func_name))
     # always ensure we have a record
     if record is None:
         record = {}
@@ -101,7 +97,6 @@ def get_object_info(self, obj, key, record=None):
 
 def get_location_info(obj, info, client_uid, sampletype_uid):
     """Returns the client info of an object"""
-    logger.info("get_location_info: Entered")
 
     # catalog queries for UI field filtering
     location_uid = api.get_uid(obj)

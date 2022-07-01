@@ -4,10 +4,10 @@ from bika.lims import FieldEditContact
 from bika.lims import SETUP_CATALOG
 from bika.lims.interfaces import IAnalysisRequest
 from Products.CMFCore.permissions import View
-from senaite.core.browser.widgets import ReferenceWidget
 from senaite.locations.extenders.fields import ExtReferenceField
 from senaite.locations.interfaces import ISenaiteLocationsLayer
 from senaite.locations import _
+from .utils import ClientAwareReferenceWidget
 from zope.component import adapts
 from zope.interface import implementer
 
@@ -23,7 +23,7 @@ location_field = ExtReferenceField(
     # accessor="getLocation",
     # edit_accessor="getLocation",
     # mutator="setLocation",
-    widget=ReferenceWidget(
+    widget=ClientAwareReferenceWidget(
         label=_(u"Sample Point Location"),
         render_own_label=True,
         size=20,
@@ -32,7 +32,7 @@ location_field = ExtReferenceField(
         showOn=True,
         visible={
             "add": "edit",
-            "header_table": "prominent",
+            "header_table": "visible",
             "secondary": "disabled",
             "verified": "view",
             "published": "view",
