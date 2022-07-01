@@ -21,6 +21,9 @@ Needed Imports:
     >>> from plone.app.testing import TEST_USER_ID
     >>> from plone.app.testing import TEST_USER_PASSWORD
     >>> from senaite import api
+    >>> from senaite.core.catalog import SAMPLE_CATALOG
+    >>> from senaite.core.catalog import SETUP_CATALOG
+    >>> from plone import api as plone_api
 
 Functional Helpers:
 
@@ -77,16 +80,16 @@ SamplePointLocation Sample Integration
 ..........................
 Create a new location:
 
-    >>> loc_title = 'SamplePointLocation One'
-    >>> loc1 = api.create(client, 'SamplePointLocation', title=loc_title, description='Desc')
-    >>> loc1.title == loc_title
+    >>> sp_loc_title = 'SamplePointLocation One'
+    >>> sp_loc1 = api.create(client, 'SamplePointLocation', title=sp_loc_title, description='Desc')
+    >>> sp_loc1.title == sp_loc_title
     True
 
 Test location workflow
-    >>> api.get_workflows_for(loc1)
+    >>> api.get_workflows_for(sp_loc1)
     ('senaite_deactivable_type_workflow',)
 
-    >>> api.get_workflow_status_of(loc1)
+    >>> api.get_workflow_status_of(sp_loc1)
     'active'
 
 Global add permission:
@@ -97,18 +100,29 @@ Global add permission:
 
 Create a new sameple point:
 
-    >>> samplepoint = new_sample_point(loc1)
-    >>> samplepoint.getSamplePointLocation().title == loc_title
+    >>> samplepoint1 = new_sample_point(sp_loc1)
+    >>> samplepoint1.getSamplePointLocation().title == sp_loc_title
     True
 
 Create a new sample:
 
-    >>> sample = new_sample([MC, MS], client, contact, sampletype, location=loc1)
+    >>> sample = new_sample([MC, MS], client, contact, sampletype, location=sp_loc1)
     >>> api.get_workflow_status_of(sample)
     'sample_due'
-    >>> sample.getSamplePointLocation().title == loc_title
+    >>> sample.getSamplePointLocation().title == sp_loc_title
     True
     >>> # import pdb; pdb.set_trace()  # fmt: skip
 
 Find sample by location:
-
+    >>> setup_cat = plone_api.portal.get_tool(name=SETUP_CATALOG)
+    >>> len(setup_cat(portal_type='SamplePointLocation'))
+    1
+    >>> sample_cat = plone_api.portal.get_tool(name=SAMPLE_CATALOG)
+    >>> len(sample_cat(portal_type='AnalysisRequest'))
+    1
+    >>> len(sample_cat(portal_type='AnalysisRequest', getSamplePointLocation='DDDDD'))
+    0
+    >>> len(sample_cat(portal_type='AnalysisRequest', getSamplePointLocation=sp_loc_title))
+    1
+    >>> len(sample_cat(portal_type='AnalysisRequest', getSamplePointLocationUID=sp_loc1.UID()))
+    1
