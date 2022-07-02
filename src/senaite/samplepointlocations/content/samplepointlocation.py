@@ -5,16 +5,24 @@ from plone.dexterity.content import Container
 from plone.supermodel import model
 from Products.CMFCore import permissions
 from senaite.core.catalog import SETUP_CATALOG
+from senaite.core.schema import AddressField
+from senaite.core.schema.addressfield import PHYSICAL_ADDRESS
+from senaite.core.schema.addressfield import POSTAL_ADDRESS
 from senaite import api
 from senaite.samplepointlocations import _
-from zope import schema
+
+# from zope import schema
 from zope.interface import implementer
 
 
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
-    address = schema.TextLine(title=_(u"Address"), required=False)
+    # Address
+    address = AddressField(
+        title=_("Address"),
+        address_types=[PHYSICAL_ADDRESS],
+    )
 
 
 @implementer(ISamplePointLocation, IDeactivable)
