@@ -1,24 +1,46 @@
 # -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
+from plone.autoform import directives
 from bika.lims.interfaces import IDeactivable
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from Products.CMFCore import permissions
 from senaite.core.catalog import SETUP_CATALOG
 from senaite.core.schema import AddressField
+from senaite.core.schema import UIDReferenceField
 from senaite.core.schema.addressfield import PHYSICAL_ADDRESS
-from senaite.core.schema.addressfield import POSTAL_ADDRESS
+from senaite.core.z3cform.widgets.uidreference import UIDReferenceWidgetFactory
 from senaite import api
 from senaite.samplepointlocations import _
-
-# from zope import schema
 from zope.interface import implementer
 
 
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
-    # Address
+    directives.widget(
+        "account_managers",
+        UIDReferenceWidgetFactory,
+        catalog="portal_catalog",
+        query="get_contacts_query",
+        display_template="<a href='${url}'>${title}</a>",
+        columns=[
+            {
+                "name": "title",
+                "width": "30",
+                "align": "left",
+                "label": _(u"Title"),
+            },
+        ],
+        limit=4,
+    )
+    account_managers = UIDReferenceField(
+        title=_(u"Account Managers"),
+        allowed_types=("Contact",),
+        multi_valued=True,
+        description=_(u"Sample point location manager/s"),
+        required=False,
+    )
     address = AddressField(
         title=_("Address"),
         address_types=[PHYSICAL_ADDRESS],
@@ -60,3 +82,16 @@ class SamplePointLocation(Container):
         """Set address by the field accessor"""
         mutator = self.mutator("address")
         return mutator(self, value)
+
+    @security.private
+    def get_contacts_query(self):
+        """Return the query for the account managers field"""
+        client_path = "/".join(self.aq_parent.getPhysicalPath())
+        # print("get_contacts_query: client_path = {}".format(client_path))
+        return {
+            "portal_type": "Contact",
+            "path": {"query": client_path},
+            "is_active": True,
+            "sort_on": "title",
+            "sort_order": "asscending",
+        }
