@@ -28,12 +28,11 @@
 senaite.samplepointlocations
 =================
 
-Tell me what your product does
 
 Features
 --------
 
-This fetaure groups Sample Points - the places where samples are taken - together per Location for easier management and reporting
+This feature groups Sample Points - the places where samples are taken - together per Location for easier management and reporting
 
 
 Examples
@@ -68,7 +67,7 @@ Contribute
 ----------
 
 - Issue Tracker: https://jira.bikalabs.com
-- Source Code: https://github.com/bikalims/senaite.samplepointlocations/
+- Source Code: https://github.com/bikalims/senaite.samplepointlocations
 - Documentation: https://www.bikalims.org/manual/setup-and-configuration/sample-points-and-types
 
 
