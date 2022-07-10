@@ -33,28 +33,19 @@ Tell me what your product does
 Features
 --------
 
-- Can be bullet points
+This fetaure groups Sample Points - the places where samples are taken - together per Location for easier management and reporting
 
 
 Examples
 --------
 
-This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
+Also see the news item, Sample Point Location Feature sponsored by HydroChem Australia, https://www.bikalims.org/news/2-tier-sample-points-sponsored
 
 
 Documentation
 -------------
 
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
-
-
-Translations
-------------
-
-This product has been translated into
-
-- Klingon (thanks, K'Plai)
+Full documentation for end users can be found in the Bika LIMS USer Manual at https://www.bikalims.org/manual/setup-and-configuration/sample-points-and-types
 
 
 Installation
@@ -76,9 +67,9 @@ and then running ``bin/buildout``
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/collective/senaite.samplepointlocations/issues
-- Source Code: https://github.com/collective/senaite.samplepointlocations
-- Documentation: https://docs.plone.org/foo/bar
+- Issue Tracker: https://jira.bikalabs.com
+- Source Code: https://github.com/bikalims/senaite.samplepointlocations/
+- Documentation: https://www.bikalims.org/manual/setup-and-configuration/sample-points-and-types
 
 
 Support
@@ -91,4 +82,4 @@ We have a mailing list located at: project@example.com
 License
 -------
 
-The project is licensed under the GPLv2.
+The project is licensed by the Bika Open Source LIMS Collective, https://www.bikalims.org, under the GPLv2. 
