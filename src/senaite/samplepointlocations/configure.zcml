@@ -24,7 +24,9 @@
   <include file="indexers.zcml" />
   <include file="permissions.zcml" />
   <include package=".extenders"/>
+  <!--
   <include package=".monkeys" />
+  -->
 
   <genericsetup:registerProfile
       name="default"
