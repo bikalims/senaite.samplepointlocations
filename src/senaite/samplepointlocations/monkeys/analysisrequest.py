@@ -54,8 +54,15 @@ def get_record_metadata(self, record):
             continue
         metadata[key] = {obj_info["uid"]: obj_info}
     sort_ordered_dict_by_list(
-        metadata, ["client_metadata", "sampletype_metadata", "location_metadata"]
+        metadata,
+        [
+            "client_metadata",
+            "samplepointlocation_metadata",
+            "samplepoint_metadata",
+            "sampletype_metadata",
+        ],
     )
+    logger.info("get_record_metadata: exit")
     return metadata
 
 
@@ -68,19 +75,16 @@ def get_object_info(self, obj, key, record=None):
     # Check if there is a function to handle objects for this field
     field_name = key.replace("_uid", "")
     func_name = "get_{}_info".format(field_name.lower())
-    logger.debug("get_object_info: func_name = {}".format(func_name))
+    logger.info("get_object_info: func_name = {}".format(func_name))
     # always ensure we have a record
     if record is None:
         record = {}
 
-    if func_name == "get_location_info":
+    if func_name == "get_samplepointlocation_info":
         info = self.get_base_info(obj)
         client = self.get_client()
         client_uid = client and api.get_uid(client) or ""
-        sampletype_uid = None
-        if len(record.get("SampleType_uid", "")) > 0:
-            sampletype_uid = record["SampleType_uid"]
-        info = get_location_info(obj, info, client_uid, sampletype_uid)
+        info = get_samplepointlocation_info(obj, info, client_uid)
     else:
         func = getattr(self, func_name, None)
         # Get the info for each object
@@ -95,7 +99,7 @@ def get_object_info(self, obj, key, record=None):
     return info
 
 
-def get_location_info(obj, info, client_uid, sampletype_uid):
+def get_samplepointlocation_info(obj, info, client_uid):
     """Returns the client info of an object"""
 
     # catalog queries for UI field filtering
@@ -104,8 +108,6 @@ def get_location_info(obj, info, client_uid, sampletype_uid):
         "getSamplePointLocationUID": [location_uid, None],
         "getClientUID": [client_uid, ""],
     }
-    if sampletype_uid is not None:
-        sp_query["sampletype_uid"] = [sampletype_uid, None]
 
     filter_queries = {
         # Display Sample Points that have this sample type assigned plus
