@@ -20,7 +20,12 @@ class SamplesListingViewAdapter(object):
         if not is_installed():
             return
         new_columns = OrderedDict(
-            (("location", dict(title=_("Location"), sortable=False, toggle=True)),)
+            (
+                (
+                    "location",
+                    dict(title=_("Sample Point Location"), sortable=False, toggle=True),
+                ),
+            )
         )
         self.listing.columns.update(new_columns)
 
