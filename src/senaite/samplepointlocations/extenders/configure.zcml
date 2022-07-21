@@ -4,11 +4,9 @@
 
     <include package="archetypes.schemaextender"/>
 
-    <!--
     <adapter name='senaite.samplepointlocations.analysisrequest.schemaextender'
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
              factory=".analysisrequest.AnalysisRequestSchemaExtender"/>
-    -->
 
     <adapter name="senaite.samplepointlocations.samplepoint.schemaextended"
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
