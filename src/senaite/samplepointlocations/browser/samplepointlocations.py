@@ -80,7 +80,20 @@ class SamplePointLocationsView(ListingView):
         item["replace"]["location_title"] = get_link(
             href=api.get_url(obj), value=obj.Title()
         )
+        address_lst = []
+        if len(obj.address) > 0:
+            address = obj.address[0]
+            if address.get("address"):
+                address_lst.append(address["address"])
+            if address.get("city"):
+                address_lst.append(address["city"])
+            if address.get("zip"):
+                address_lst.append(address["zip"])
+            if address.get("subdivision1"):
+                address_lst.append(address["subdivision1"])
+            if address.get("country"):
+                address_lst.append(address["country"])
         item["replace"]["location_address"] = get_link(
-            href=api.get_url(obj), value=obj.address
+            href=api.get_url(obj), value=", ".join(address_lst)
         )
         return item
