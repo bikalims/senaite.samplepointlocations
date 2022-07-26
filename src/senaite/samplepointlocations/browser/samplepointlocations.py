@@ -1,5 +1,4 @@
 import collections
-
 from bika.lims import api
 from bika.lims.utils import get_link
 from senaite.app.listing import ListingView

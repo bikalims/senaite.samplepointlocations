@@ -25,6 +25,13 @@
     permission="senaite.core.permissions.ManageBika"
     layer="senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"/>
 
+  <browser:page
+    for="senaite.samplepointlocations.content.samplepointlocation.ISamplePointLocation"
+    name="view"
+    class=".samplepointlocation.SamplePointLocationEditForm"
+    permission="senaite.core.permissions.ManageBika"
+    layer="senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"/>
+
   <include package=".listingview"/>
 
 </configure>

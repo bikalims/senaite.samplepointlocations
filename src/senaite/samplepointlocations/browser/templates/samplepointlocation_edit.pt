@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="wt.fleet"
+      metal:use-macro="context/main_template/macros/master">
+
+    <metal:block fill-slot="main">
+      <div id="content-core">
+          <metal:block use-macro="context/@@ploneform-macros/form" />
+
+          <div class="action">
+            <a id="sampletype-buttons-add"
+               class="submit-widget button-field"
+               tal:attributes="href view/get_add_link">Add</a>
+          </div>
+          <div tal:repeat="stype view/get_sample_types">
+              <a tal:attributes="href stype/url" tal:content="stype/title"/>
+          </div>
+      </div>
+
+    </metal:block>
+
+</html>
+
