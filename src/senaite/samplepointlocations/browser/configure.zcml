@@ -28,7 +28,7 @@
   <browser:page
     for="senaite.samplepointlocations.content.samplepointlocation.ISamplePointLocation"
     name="view"
-    class=".samplepointlocation.SamplePointLocationEditForm"
+    class=".samplepointlocation.SamplePointLocationView"
     permission="senaite.core.permissions.ManageBika"
     layer="senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"/>
 

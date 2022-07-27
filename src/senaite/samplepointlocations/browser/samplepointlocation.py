@@ -1,32 +1,80 @@
-from bika.lims import SETUP_CATALOG
-from bika.lims.api import get_uid
-from bika.lims.api import get_url
-from bika.lims.api import search
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.dexterity.browser import edit
+import collections
+from bika.lims import api
+from bika.lims.permissions import AddSamplePoint
+from bika.lims.utils import get_link
+from senaite.app.listing import ListingView
+from senaite.core.catalog import SETUP_CATALOG
+from senaite.samplepointlocations import _
 from senaite.samplepointlocations import logger
 
 
-class SamplePointLocationEditForm(edit.DefaultEditForm):
-    template = ViewPageTemplateFile("templates/samplepointlocation_edit.pt")
-    label = "Sample Point Location"
-
-    def get_sample_types(self):
-        types = []
-        brains = search(
-            {
-                "portal_type": "SamplePoint",
-                "getSamplePointLocationUID": get_uid(self.context),
-            },
-            SETUP_CATALOG,
+class SamplePointLocationView(ListingView):
+    def __init__(self, context, request):
+        super(SamplePointLocationView, self).__init__(context, request)
+        logger.info("SamplePointLocationView: init")
+        self.catalog = SETUP_CATALOG
+        path = api.get_path(self.context)
+        self.contentFilter = dict(
+            portal_type="SamplePoint", sort_on="created", path={"query": path}
         )
-        for brain in brains:
-            types.append({"title": brain.Title, "url": brain.getURL()})
-        return types
+        self.form_id = "locations"
 
-    def get_add_link(self):
-        return "{}/createObject?type_name=SamplePoint".format(get_url(self.context))
+        self.context_actions = {
+            _("Add"): {
+                "url": "++add++SamplePoint",
+                "permission": AddSamplePoint,
+                "icon": "++resource++bika.lims.images/add.png",
+            }
+        }
 
-    def update(self):
-        logger.info("SamplePointLocationEditForm: update")
-        super(SamplePointLocationEditForm, self).update()
+        self.icon = "{}/{}/{}".format(
+            self.portal_url, "/++resource++bika.lims.images", "sampletype_big.png"
+        )
+
+        self.title = "Sample Points"
+        self.description = self.context.Description()
+        self.show_select_column = True
+
+        self.columns = collections.OrderedDict(
+            (
+                ("location_id", dict(title=_("ID"), index="getId")),
+                ("location_title", dict(title=_("Title"), index="Title")),
+            )
+        )
+
+        self.review_states = [
+            {
+                "id": "default",
+                "title": _("Active"),
+                "contentFilter": {"is_active": True},
+                "transitions": [
+                    {"id": "deactivate"},
+                ],
+                "columns": self.columns.keys(),
+            },
+            {
+                "id": "inactive",
+                "title": _("Inactive"),
+                "contentFilter": {"is_active": False},
+                "transitions": [
+                    {"id": "activate"},
+                ],
+                "columns": self.columns.keys(),
+            },
+            {
+                "id": "all",
+                "title": _("All"),
+                "contentFilter": {},
+                "columns": self.columns.keys(),
+            },
+        ]
+
+    def folderitem(self, obj, item, index):
+        obj = api.get_object(obj)
+        item["replace"]["location_id"] = get_link(
+            href=api.get_url(obj), value=obj.getId()
+        )
+        item["replace"]["location_title"] = get_link(
+            href=api.get_url(obj), value=obj.Title()
+        )
+        return item
