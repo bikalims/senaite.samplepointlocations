@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="senaite.core">
+  <body>
+
+
+    <metal:content-title fill-slot="content-title">
+      <table class="table table-sm small">
+        <p tal:content="here/title">
+        <tal:loop repeat="field python:view.get_fields()">
+          <tr>
+            <td>
+              <label class="formQuestion">
+                <span tal:content="field/title"/>
+                <span tal:content="field/value"/>
+              </label>
+            </td>
+          </tr>
+        </tal:loop>
+      </table>
+
+
+
+      <div id="viewlet-listing-table-title" tal:content="structure provider:senaite.listingtabletitle" />
+    </metal:content-title>
+
+    <metal:content-description fill-slot="content-description">
+      <div id="viewlet-listing-table-description" tal:content="structure provider:senaite.listingtabledescription" />
+    </metal:content-description>
+
+    <metal:content-core fill-slot="content-core">
+      <div id="viewlet-above-listing-table" tal:content="structure provider:senaite.abovelistingtable" />
+      <div id="folderlisting-main-table"
+           tal:content="structure view/contents_table">
+      </div>
+      <div id="viewlet-below-content-table" tal:content="structure provider:senaite.belowlistingtable" />
+    </metal:content-core>
+
+  </body>
+</html>

@@ -2,6 +2,7 @@ import collections
 from bika.lims import api
 from bika.lims.permissions import AddSamplePoint
 from bika.lims.utils import get_link
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from senaite.app.listing import ListingView
 from senaite.core.catalog import SETUP_CATALOG
 from senaite.samplepointlocations import _
@@ -9,6 +10,8 @@ from senaite.samplepointlocations import logger
 
 
 class SamplePointLocationView(ListingView):
+    template = ViewPageTemplateFile("templates/samplepointlocation_view.pt")
+
     def __init__(self, context, request):
         super(SamplePointLocationView, self).__init__(context, request)
         logger.info("SamplePointLocationView: init")
@@ -78,3 +81,19 @@ class SamplePointLocationView(ListingView):
             href=api.get_url(obj), value=obj.Title()
         )
         return item
+
+    def get_fields(self):
+        address_lst = []
+        if len(self.context.address) > 0:
+            address = self.context.address[0]
+            if address.get("address"):
+                address_lst.append(address["address"])
+            if address.get("city"):
+                address_lst.append(address["city"])
+            if address.get("zip"):
+                address_lst.append(address["zip"])
+            if address.get("subdivision1"):
+                address_lst.append(address["subdivision1"])
+            if address.get("country"):
+                address_lst.append(address["country"])
+        return [{"title": "Address: ", "value": ", ".join(address_lst)}]
