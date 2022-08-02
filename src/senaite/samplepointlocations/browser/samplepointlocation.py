@@ -6,7 +6,8 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from senaite.app.listing import ListingView
 from senaite.core.catalog import SETUP_CATALOG
 from senaite.samplepointlocations import _
-from senaite.samplepointlocations import logger
+
+# from senaite.samplepointlocations import logger
 
 
 class SamplePointLocationView(ListingView):
@@ -14,7 +15,6 @@ class SamplePointLocationView(ListingView):
 
     def __init__(self, context, request):
         super(SamplePointLocationView, self).__init__(context, request)
-        logger.info("SamplePointLocationView: init")
         self.catalog = SETUP_CATALOG
         path = api.get_path(self.context)
         self.contentFilter = dict(
@@ -24,7 +24,7 @@ class SamplePointLocationView(ListingView):
 
         self.context_actions = {
             _("Add"): {
-                "url": "++add++SamplePoint",
+                "url": "createObject?type_name=SamplePoint",
                 "permission": AddSamplePoint,
                 "icon": "++resource++bika.lims.images/add.png",
             }
@@ -96,4 +96,12 @@ class SamplePointLocationView(ListingView):
                 address_lst.append(address["subdivision1"])
             if address.get("country"):
                 address_lst.append(address["country"])
-        return [{"title": "Address: ", "value": ", ".join(address_lst)}]
+        managers = []
+        if len(self.context.account_managers) > 0:
+            for uid in self.context.account_managers:
+                man = api.get_object_by_uid(uid)
+                managers.append(man.getFullname())
+        return [
+            {"title": "Address: ", "value": ", ".join(address_lst)},
+            {"title": "Account Managers", "value": ", ".join(managers)},
+        ]

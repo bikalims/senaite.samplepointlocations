@@ -9,20 +9,21 @@
 
     <metal:content-title fill-slot="content-title">
       <table class="table table-sm small">
-        <p tal:content="here/title">
-        <tal:loop repeat="field python:view.get_fields()">
-          <tr>
-            <td>
-              <label class="formQuestion">
-                <span tal:content="field/title"/>
-                <span tal:content="field/value"/>
-              </label>
-            </td>
-          </tr>
-        </tal:loop>
+        <h1 tal:content="here/title">
+
+        <tbody>
+          <tal:loop repeat="field python:view.get_fields()">
+            <tr>
+              <td class="active label">
+                  <span tal:content="field/title"/>
+              </td>
+              <td>
+                  <span tal:content="field/value"/>
+              </td>
+            </tr>
+          </tal:loop>
+        </tbody>
       </table>
-
-
 
       <div id="viewlet-listing-table-title" tal:content="structure provider:senaite.listingtabletitle" />
     </metal:content-title>
