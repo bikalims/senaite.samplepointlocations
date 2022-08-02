@@ -102,6 +102,6 @@ class SamplePointLocationView(ListingView):
                 man = api.get_object_by_uid(uid)
                 managers.append(man.getFullname())
         return [
-            {"title": "Address: ", "value": ", ".join(address_lst)},
             {"title": "Account Managers", "value": ", ".join(managers)},
+            {"title": "Address ", "value": ", ".join(address_lst)},
         ]

@@ -8,7 +8,7 @@
 
 
     <metal:content-title fill-slot="content-title">
-      <table class="table table-sm small">
+      <table class="table table-sm">
         <h1 tal:content="here/title">
 
         <tbody>
@@ -25,6 +25,7 @@
         </tbody>
       </table>
 
+      <br/>
       <div id="viewlet-listing-table-title" tal:content="structure provider:senaite.listingtabletitle" />
     </metal:content-title>
 
