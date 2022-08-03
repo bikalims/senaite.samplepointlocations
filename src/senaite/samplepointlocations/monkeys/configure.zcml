@@ -18,6 +18,13 @@
     replacement=".samplepoint.getSamplePointLocation" />
 
   <monkey:patch
+    description="Set samplepoint location"
+    class="bika.lims.content.samplepoint.SamplePoint"
+    original="setSamplePointLocation"
+    ignoreOriginal="True"
+    replacement=".samplepoint.setSamplePointLocation" />
+
+  <monkey:patch
     description="Include Location get_client_info"
     class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
     original="get_client_info"

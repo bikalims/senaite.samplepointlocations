@@ -9,6 +9,7 @@ from Products.CMFCore.permissions import View
 from senaite.samplepointlocations.extenders.fields import ExtReferenceField
 from senaite.samplepointlocations.interfaces import ISenaiteSamplePointLocationsLayer
 from senaite.samplepointlocations import _
+from senaite.samplepointlocations import logger
 from .utils import ClientAwareReferenceWidget
 from zope.component import adapts
 from zope.interface import implementer
@@ -35,7 +36,7 @@ sample_point_location_field = ExtReferenceField(
             "sort_order": "ascending",
         },
         showOn=True,
-        visible={"edit": "visible", "view": "visible"},
+        visible={"edit": "hidden", "view": "visible"},
         ui_item="Title",
         colModel=[
             dict(columnName="UID", hidden=True),
@@ -106,7 +107,36 @@ class SamplePointSchemaModifier(object):
     def __init__(self, context):
         self.context = context
 
+    def _get_parent_location(self):
+        parent = self.context
+        while True:
+            if parent.portal_type == "SamplePointLocation":
+                return parent.UID()
+            parent = parent.aq_parent
+
     def fiddle(self, schema):
         for field in schema.fields():
             field.schemata = "default"
         return schema
+
+
+def handleObjectAdded(obj, event):
+    if obj.isTemporary():
+        return
+    if obj.portal_type == "SamplePoint":
+        obj.setSamplePointLocation(obj.aq_parent)
+        logger.info(
+            "handleObjectAdded: {} -> {}".format(
+                obj.getSamplePointLocation().Title(), obj.aq_parent.Title()
+            )
+        )
+
+
+def handleObjectModified(obj, event):
+    if obj.portal_type == "SamplePoint":
+        obj.setSamplePointLocation(obj.aq_parent)
+        logger.info(
+            "handleObjectModified: {} -> {}".format(
+                obj.getSamplePointLocation().Title(), obj.aq_parent.Title()
+            )
+        )

@@ -15,4 +15,13 @@
     <adapter name="senaite.samplepointlocations.samplepoint.schemamodifier"
              provides="archetypes.schemaextender.interfaces.ISchemaModifier"
              factory=".samplepoint.SamplePointSchemaModifier"/>
+
+    <subscriber
+            for="bika.lims.interfaces.ISamplePoint
+                 zope.lifecycleevent.interfaces.IObjectAddedEvent"
+            handler=".samplepoint.handleObjectAdded"/>
+    <subscriber
+            for="bika.lims.interfaces.ISamplePoint
+                 zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+            handler=".samplepoint.handleObjectModified"/>
 </configure>
