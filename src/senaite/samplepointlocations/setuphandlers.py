@@ -47,6 +47,7 @@ def setup_handler(context):
     portal = context.getSite()
 
     add_location_to_client(portal)
+    remove_client_sample_types_action(portal)
 
     # Configure visible navigation items
     setup_navigation_types(portal)
@@ -173,6 +174,22 @@ def add_location_to_client(portal):
             allowed_types.append("SamplePointLocation")
             fti.allowed_content_types = allowed_types
             logger.info("Add SamplePointLocation from Client's allowed types")
+
+
+def remove_client_sample_types_action(portal):
+    pt = api.get_tool("portal_types", context=portal)
+    fti = pt.get("Client")
+
+    # removed location listing
+    actions = fti.listActions()
+    for idx, action in enumerate(actions):
+        if action.id == "samplepoints":
+            fti.deleteActions(
+                [
+                    idx,
+                ]
+            )
+            break
 
 
 def remove_client_allowed_types(portal):
