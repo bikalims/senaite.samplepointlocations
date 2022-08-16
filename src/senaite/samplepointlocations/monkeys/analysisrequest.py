@@ -24,6 +24,8 @@ def get_record_metadata(self, record):
         if not value:
             continue
 
+        logger.debug("------get_record_metadata: {}".format(metadata_key))
+
         # Get objects information (metadata)
         objs_info = self.get_objects_info(record, key)
         objs_uids = map(lambda obj: obj["uid"], objs_info)
@@ -62,7 +64,8 @@ def get_record_metadata(self, record):
             "sampletype_metadata",
         ],
     )
-    logger.info("get_record_metadata: exit")
+    logger.debug("get_record_metadata: {}".format(metadata))
+    logger.debug("get_record_metadata: exit")
     return metadata
 
 
@@ -75,7 +78,7 @@ def get_object_info(self, obj, key, record=None):
     # Check if there is a function to handle objects for this field
     field_name = key.replace("_uid", "")
     func_name = "get_{}_info".format(field_name.lower())
-    logger.info("get_object_info: func_name = {}".format(func_name))
+    logger.debug("get_object_info: func_name = {}".format(func_name))
     # always ensure we have a record
     if record is None:
         record = {}
@@ -85,6 +88,11 @@ def get_object_info(self, obj, key, record=None):
         client = self.get_client()
         client_uid = client and api.get_uid(client) or ""
         info = get_samplepointlocation_info(obj, info, client_uid)
+    elif func_name == "get_samplepoint_info":
+        info = self.get_base_info(obj)
+        client = self.get_client()
+        client_uid = client and api.get_uid(client) or ""
+        info = get_samplepoint_info(obj, info, client_uid)
     else:
         func = getattr(self, func_name, None)
         # Get the info for each object
@@ -92,7 +100,7 @@ def get_object_info(self, obj, key, record=None):
 
     # Check if there is any adapter to handle objects for this field
     for name, adapter in getAdapters((obj,), IAddSampleObjectInfo):
-        logger.info("adapter for '{}': {}".format(field_name, name))
+        logger.debug("adapter for '{}': {}".format(field_name, name))
         ad_info = adapter.get_object_info_with_record(record)
         self.update_object_info(info, ad_info)
 
@@ -113,6 +121,25 @@ def get_samplepointlocation_info(obj, info, client_uid):
         # Display Sample Points that have this sample type assigned plus
         # those that do not have a sample type assigned
         "SamplePoint": sp_query
+    }
+    info["filter_queries"] = filter_queries
+
+    return info
+
+
+def get_samplepoint_info(obj, info, client_uid):
+    """Returns the client info of an object"""
+
+    UIDs = []
+    for sample_type in obj.getSampleTypes():
+        UIDs.append(sample_type.UID())
+    # catalog queries for UI field filtering
+    st_query = {"UID": UIDs}
+
+    filter_queries = {
+        # Display Sample Points that have this sample type assigned plus
+        # those that do not have a sample type assigned
+        "SampleType": st_query
     }
     info["filter_queries"] = filter_queries
 
