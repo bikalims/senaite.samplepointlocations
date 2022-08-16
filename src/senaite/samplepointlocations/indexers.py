@@ -1,11 +1,10 @@
 from bika.lims.interfaces import IAnalysisRequest
 from bika.lims.interfaces import ISamplePoint
 from plone.indexer import indexer
-from senaite.app.supermodel import SuperModel
-from senaite.api import get_object_by_uid
 from senaite.samplepointlocations.content.samplepointlocation import (
     ISamplePointLocation,
 )
+from senaite.samplepointlocations import logger
 
 
 @indexer(ISamplePointLocation)
@@ -15,17 +14,18 @@ def location_client_uid(instance):
 
 @indexer(IAnalysisRequest)
 def ar_location_title(instance):
-    loc = instance.getSamplePointLocation()
-    return loc.title if loc else ""
+    try:
+        loc = instance.getSamplePointLocation()
+        return loc.title
+    except Exception:
+        return ""
 
 
 @indexer(ISamplePoint)
 def sp_location_title(instance):
     try:
-        model = SuperModel(instance)
-        model_data = model.to_dict()
-        loc = get_object_by_uid(model_data["SamplePointLocation"])
-        return loc.title if loc else ""
+        loc = instance.getSamplePointLocation()
+        return loc.title
     except Exception:
         return ""
 
@@ -33,9 +33,8 @@ def sp_location_title(instance):
 @indexer(ISamplePoint)
 def sp_location_uid(instance):
     try:
-        model = SuperModel(instance)
-        model_data = model.to_dict()
-        loc = get_object_by_uid(model_data["SamplePointLocation"])
-        return loc.UID if loc else ""
+        loc = instance.getSamplePointLocation()
+        return loc.UID()
     except Exception:
+        logger.info("sp_location_uid: failed")
         return ""
