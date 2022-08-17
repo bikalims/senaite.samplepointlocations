@@ -25,6 +25,7 @@
   <include file="permissions.zcml" />
   <include package=".extenders"/>
   <include package=".monkeys" />
+  <include package=".upgrade" />
 
   <genericsetup:registerProfile
       name="default"
