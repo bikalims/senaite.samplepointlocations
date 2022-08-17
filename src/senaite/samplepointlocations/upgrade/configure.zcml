@@ -9,7 +9,7 @@
      source="1.0.0"
      destination="1.0.1"
      handler="senaite.samplepointlocations.upgrade.v01_00_001.upgrade"
-     profile="bika.coa:default"/>
+     profile="senaite.samplepointlocations:default"/>
 
 </configure>
 
