@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from bika.lims import api
-from senaite.crms import PRODUCT_NAME
-from senaite.crms import logger
-
 from senaite.core.upgrade import upgradestep
+from senaite.samplepointlocations import PRODUCT_NAME
+from senaite.samplepointlocations import logger
 
 version = "1.0.1"
 
