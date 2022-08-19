@@ -45,5 +45,12 @@
     ignoreOriginal="True"
     replacement=".analysisrequest.get_record_metadata" />
 
+  <monkey:patch
+    description="Get Flush Settings"
+    class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
+    original="ajax_get_flush_settings"
+    ignoreOriginal="True"
+    replacement=".analysisrequest.ajax_get_flush_settings" />
+
 </configure>
 

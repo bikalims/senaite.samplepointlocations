@@ -1,3 +1,4 @@
+from bika.lims.interfaces import IAddSampleFieldsFlush
 from bika.lims.interfaces import IAddSampleObjectInfo
 from collections import OrderedDict
 from senaite import api
@@ -196,6 +197,68 @@ def get_client_info(self, obj):
     }
     info["filter_queries"] = filter_queries
     return info
+
+
+def ajax_get_flush_settings(self):
+    """Returns the settings for fields flush"""
+    flush_settings = {
+        "Client": [
+            "Contact",
+            "CCContact",
+            "InvoiceContact",
+            "SamplePoint",
+            "Template",
+            "Profiles",
+            "PrimaryAnalysisRequest",
+            "Specification",
+            "Batch",
+        ],
+        "Contact": ["CCContact"],
+        "SamplePointLocation": [
+            "SamplePoint",
+            "SampleType",
+        ],
+        "SamplePoint": [
+            "SampleType",
+        ],
+        "SampleType": [
+            "Specification",
+            "Template",
+        ],
+        "PrimarySample": [
+            "Batch" "Client",
+            "Contact",
+            "CCContact",
+            "CCEmails",
+            "ClientOrderNumber",
+            "ClientReference",
+            "ClientSampleID",
+            "ContainerType",
+            "DateSampled",
+            "EnvironmentalConditions",
+            "InvoiceContact",
+            "Preservation",
+            "Profiles",
+            "SampleCondition",
+            "SamplePoint",
+            "SampleType",
+            "SamplingDate",
+            "SamplingDeviation",
+            "StorageLocation",
+            "Specification",
+            "Template",
+        ],
+    }
+
+    # Maybe other add-ons have additional fields that require flushing
+    for name, ad in getAdapters((self.context,), IAddSampleFieldsFlush):
+        logger.info("Additional flush settings from {}".format(name))
+        additional_settings = ad.get_flush_settings()
+        for key, values in additional_settings.items():
+            new_values = flush_settings.get(key, []) + values
+            flush_settings[key] = list(set(new_values))
+
+    return flush_settings
 
 
 @check_installed(None)
