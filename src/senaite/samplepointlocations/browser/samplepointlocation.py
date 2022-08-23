@@ -104,6 +104,4 @@ class SamplePointLocationView(ListingView):
         return [
             {"title": "Account Managers", "value": ", ".join(managers)},
             {"title": "Address ", "value": ", ".join(address_lst)},
-            {"title": "Equiment ID ", "value": self.context.equipment_id},
-            {"title": "Equiment Type ", "value": self.context.equipment_type},
         ]

@@ -13,7 +13,6 @@ from senaite.core.z3cform.widgets.uidreference import UIDReferenceWidgetFactory
 from senaite import api
 from senaite.samplepointlocations import _
 from zope.interface import implementer
-from zope.schema import TextLine
 
 
 class ISamplePointLocation(model.Schema):
@@ -45,19 +44,6 @@ class ISamplePointLocation(model.Schema):
     address = AddressField(
         title=_("Address"),
         address_types=[PHYSICAL_ADDRESS],
-    )
-    address = AddressField(
-        title=_("Address"),
-        address_types=[PHYSICAL_ADDRESS],
-    )
-    # Equiment and EquipmentTypes should have their own schema/contenttypes
-    equipment_id = TextLine(
-        title=_("Equipment ID"),
-        required=False,
-    )
-    equipment_type = TextLine(
-        title=_("Equipment Type"),
-        required=False,
     )
 
 

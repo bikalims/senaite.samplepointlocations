@@ -4,7 +4,9 @@ from archetypes.schemaextender.interfaces import ISchemaModifier
 from bika.lims import FieldEditContact
 from bika.lims import SETUP_CATALOG
 from bika.lims.interfaces import ISamplePoint
+from .fields import ExtStringField
 from collections import OrderedDict
+from Products.Archetypes.Widget import StringWidget
 from Products.CMFCore.permissions import View
 from senaite.samplepointlocations.extenders.fields import ExtReferenceField
 from senaite.samplepointlocations.interfaces import ISenaiteSamplePointLocationsLayer
@@ -45,6 +47,30 @@ sample_point_location_field = ExtReferenceField(
     ),
 )
 
+equipment_id_field = ExtStringField(
+    "EquipmentID",
+    required=False,
+    mode="rw",
+    read_permission=View,
+    write_permission=FieldEditContact,
+    widget=StringWidget(
+        label=_(u"Equipment ID"),
+        description=_(u"The equipment id used on the sample point"),
+    ),
+)
+
+equipment_type_field = ExtStringField(
+    "EquipmentType",
+    required=False,
+    mode="rw",
+    read_permission=View,
+    write_permission=FieldEditContact,
+    widget=StringWidget(
+        label=_(u"Equipment Type"),
+        description=_(u"The equipment type used on the sample point"),
+    ),
+)
+
 
 @implementer(IOrderableSchemaExtender, IBrowserLayerAwareExtender)
 class SamplePointSchemaExtender(object):
@@ -53,6 +79,8 @@ class SamplePointSchemaExtender(object):
 
     fields = [
         sample_point_location_field,
+        equipment_id_field,
+        equipment_type_field,
     ]
 
     def __init__(self, context):
@@ -80,6 +108,8 @@ class SamplePointSchemaExtender(object):
                         "rights",
                         "creation_date",
                         "modification_date",
+                        "EquipmentID",
+                        "EquipmentType",
                         "SamplingFrequency",
                         "SampleTypes",
                         "Composite",
