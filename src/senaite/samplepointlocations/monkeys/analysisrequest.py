@@ -125,6 +125,18 @@ def get_samplepointlocation_info(obj, info, client_uid):
     }
     info["filter_queries"] = filter_queries
 
+    def get_account_managers_emailaddreses(account_managers):
+        emails = []
+        for index, uid in enumerate(account_managers):
+            man = api.get_object_by_uid(uid)
+            emails.append(man.getEmailAddress())
+        return emails
+    ac_man_emails = get_account_managers_emailaddreses(obj.account_managers)
+
+    info["field_values"].update(
+        {"CCEmails": {"value": ac_man_emails, "if_empty": True}}
+    )
+
     return info
 
 
