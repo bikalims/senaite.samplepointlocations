@@ -155,6 +155,12 @@ def get_samplepoint_info(obj, info, client_uid):
         "SampleType": st_query
     }
     info["filter_queries"] = filter_queries
+    if len(UIDs) == 1:
+        sample_uid = UIDs[0]
+        sample_title = api.get_object_by_uid(sample_uid).Title()
+        info["field_values"].update(
+            {"SampleType": {"uid": sample_uid, "title": sample_title}}
+        )
 
     return info
 
