@@ -8,6 +8,10 @@
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
              factory=".analysisrequest.AnalysisRequestSchemaExtender"/>
 
+    <adapter name='senaite.samplepointlocations.analysisrequest.schemamodifier'
+             provides="archetypes.schemaextender.interfaces.ISchemaModifier"
+             factory=".analysisrequest.AnalysisRequestSchemaModifier" />
+
     <adapter name="senaite.samplepointlocations.samplepoint.schemaextended"
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
              factory=".samplepoint.SamplePointSchemaExtender"/>

@@ -29,7 +29,7 @@ class SamplePointLocationsView(ListingView):
             self.portal_url, "/++resource++bika.lims.images", "sampletype_big.png"
         )
 
-        self.title = "Sample Point Locations"
+        self.title = "System Locations"
         self.description = self.context.Description()
         self.show_select_column = True
 

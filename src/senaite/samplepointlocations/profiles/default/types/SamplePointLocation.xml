@@ -7,7 +7,7 @@
   <!-- Basic properties -->
   <property
       i18n:translate=""
-      name="title">Sample Point Location</property>
+      name="title">System Location</property>
   <property
       i18n:translate=""
       name="description">A container of SamplePoints in an area</property>

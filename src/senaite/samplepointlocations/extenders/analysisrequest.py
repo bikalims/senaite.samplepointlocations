@@ -1,5 +1,6 @@
 from archetypes.schemaextender.interfaces import IBrowserLayerAwareExtender
 from archetypes.schemaextender.interfaces import ISchemaExtender
+from archetypes.schemaextender.interfaces import ISchemaModifier
 from bika.lims import FieldEditContact
 from bika.lims import SETUP_CATALOG
 from bika.lims.interfaces import IAnalysisRequest
@@ -10,6 +11,7 @@ from senaite.samplepointlocations import _
 from .utils import ClientAwareReferenceWidget
 from zope.component import adapts
 from zope.interface import implementer
+from zope.interface import implements
 
 location_field = ExtReferenceField(
     "SamplePointLocation",
@@ -24,7 +26,7 @@ location_field = ExtReferenceField(
     # edit_accessor="getSamplePointLocation",
     # mutator="setSamplePointLocation",
     widget=ClientAwareReferenceWidget(
-        label=_(u"Sample Point Location"),
+        label=_(u"System Location"),
         render_own_label=True,
         size=20,
         catalog_name=SETUP_CATALOG,
@@ -63,3 +65,18 @@ class AnalysisRequestSchemaExtender(object):
 
     def getFields(self):
         return self.fields
+
+
+class AnalysisRequestSchemaModifier(object):
+    adapts(IAnalysisRequest)
+    implements(ISchemaModifier)
+
+    def __init__(self, context):
+        self.context = context
+
+    def fiddle(self, schema):
+        """
+        """
+        schema['SamplePoint'].widget.label = "System"
+
+        return schema
