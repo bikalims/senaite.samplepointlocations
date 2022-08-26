@@ -13,11 +13,16 @@ from senaite.core.z3cform.widgets.uidreference import UIDReferenceWidgetFactory
 from senaite import api
 from senaite.samplepointlocations import _
 from zope.interface import implementer
-
+from zope.schema import TextLine
+from zope import schema
 
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
+    SystemId = TextLine(
+        title=_("ID"),
+        required=False,
+    )
     directives.widget(
         "account_managers",
         UIDReferenceWidgetFactory,
@@ -45,6 +50,17 @@ class ISamplePointLocation(model.Schema):
         title=_("Address"),
         address_types=[PHYSICAL_ADDRESS],
     )
+#     import pdb;pdb.set_trace()
+
+
+#     schema = schema.copy() + model.Schema((
+#     SystemId,
+#     account_managers,
+#     address,
+# ))
+
+#     schema.moveField("Title", after="ID")
+    
 
 
 @implementer(ISamplePointLocation, IDeactivable)
