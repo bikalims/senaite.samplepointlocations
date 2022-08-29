@@ -102,7 +102,8 @@ class SamplePointLocationsView(ListingView):
                 address_lst.append(address["subdivision1"])
             if address.get("country"):
                 address_lst.append(address["country"])
-        item["replace"]["location_address"] = get_link(
-            href=api.get_url(obj), value=", ".join(address_lst)
+        if address_lst:
+            item["replace"]["location_address"] = get_link(
+                href=api.get_url(obj), value=", ".join(address_lst)
         )
         return item
