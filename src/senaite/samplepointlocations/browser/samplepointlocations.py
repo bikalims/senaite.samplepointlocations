@@ -35,7 +35,7 @@ class SamplePointLocationsView(ListingView):
 
         self.columns = collections.OrderedDict(
             (
-                ("System_id", dict(title=_("System Locations ID"),)),
+                ("System_location_id", dict(title=_("System Location ID"),)),
                 ("location_title", dict(title=_("Title"), index="Title")),
                 (
                     "location_managers",
@@ -79,7 +79,7 @@ class SamplePointLocationsView(ListingView):
         obj = api.get_object(obj)
         System_location_Id = obj.SystemLocationsId
         if System_location_Id:
-            item["replace"]["System_id"] = get_link(
+            item["replace"]["System_location_id"] = get_link(
                 href=api.get_url(obj), value=System_location_Id
             )
         item["replace"]["location_title"] = get_link(

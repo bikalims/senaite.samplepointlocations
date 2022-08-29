@@ -14,13 +14,12 @@ from senaite import api
 from senaite.samplepointlocations import _
 from zope.interface import implementer
 from zope.schema import TextLine
-from zope import schema
 
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
     SystemLocationsId = TextLine(
-        title=_("System Locations ID"),
+        title=_("System Location ID"),
         required=False,
     )
     directives.widget(
@@ -49,18 +48,7 @@ class ISamplePointLocation(model.Schema):
     address = AddressField(
         title=_("Address"),
         address_types=[PHYSICAL_ADDRESS],
-    )
-#     import pdb;pdb.set_trace()
-
-
-#     schema = schema.copy() + model.Schema((
-#     SystemId,
-#     account_managers,
-#     address,
-# ))
-
-#     schema.moveField("Title", after="ID")
-    
+    )    
 
 
 @implementer(ISamplePointLocation, IDeactivable)
