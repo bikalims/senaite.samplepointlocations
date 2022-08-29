@@ -164,7 +164,7 @@ def handleObjectAdded(obj, event):
 
 
 def handleObjectModified(obj, event):
-    if not is_installed:
+    if not is_installed():
         return
     if obj.portal_type == "SamplePoint":
         obj.setSamplePointLocation(obj.aq_parent)
