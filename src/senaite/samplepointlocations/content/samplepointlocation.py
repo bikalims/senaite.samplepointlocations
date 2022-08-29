@@ -19,8 +19,8 @@ from zope import schema
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
-    SystemId = TextLine(
-        title=_("ID"),
+    SystemLocationsId = TextLine(
+        title=_("System Locations ID"),
         required=False,
     )
     directives.widget(
