@@ -41,7 +41,6 @@ class SamplePointLocationView(ListingView):
         self.columns = collections.OrderedDict(
             (
                 ("systems_id", dict(title=_("System ID"))),
-                # ("location_id", dict(title=_("ID"), index="getId")),
                 ("location_title", dict(title=_("Title"), index="Title")),
             )
         )
