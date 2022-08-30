@@ -104,6 +104,7 @@ class SamplePointLocationView(ListingView):
                 man = api.get_object_by_uid(uid)
                 managers.append(man.getFullname())
         return [
+            {"title": "System Location ID", "value": self.context.SystemLocationsId},
             {"title": "Account Managers", "value": ", ".join(managers)},
             {"title": "Address ", "value": ", ".join(address_lst)},
         ]
