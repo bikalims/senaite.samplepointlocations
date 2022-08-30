@@ -75,7 +75,6 @@ class SamplePointLocationView(ListingView):
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
         System_Id = obj.SystemId
-        import pdb;pdb.set_trace()
         if System_Id:
             item["replace"]["system_id"] = get_link(
                 href=api.get_url(obj), value=System_Id
