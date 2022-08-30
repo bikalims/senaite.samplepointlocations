@@ -19,5 +19,12 @@
      handler="senaite.samplepointlocations.upgrade.v01_00_002.upgrade"
      profile="senaite.samplepointlocations:default"/>
 
+ <genericsetup:upgradeStep
+     title="Upgrade to SENAITE SAMPLELOCATIONS 1.0.3"
+     description=""
+     source="1.0.2"
+     destination="1.0.3"
+     handler="senaite.samplepointlocations.upgrade.v01_00_003.upgrade"
+     profile="senaite.samplepointlocations:default"/>
 </configure>
 

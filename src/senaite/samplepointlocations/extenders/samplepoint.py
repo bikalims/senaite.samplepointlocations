@@ -12,6 +12,7 @@ from senaite.samplepointlocations.extenders.fields import ExtReferenceField
 from senaite.samplepointlocations.interfaces import ISenaiteSamplePointLocationsLayer
 from senaite.samplepointlocations import _
 from senaite.samplepointlocations import logger
+from senaite.samplepointlocations import is_installed
 from .utils import ClientAwareReferenceWidget
 from zope.component import adapts
 from zope.interface import implementer
@@ -177,6 +178,8 @@ def handleObjectAdded(obj, event):
 
 
 def handleObjectModified(obj, event):
+    if not is_installed():
+        return
     if obj.portal_type == "SamplePoint":
         obj.setSamplePointLocation(obj.aq_parent)
         logger.info(
