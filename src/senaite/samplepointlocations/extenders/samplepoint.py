@@ -29,7 +29,6 @@ system_id_field = ExtStringField(
     ),
 )
 
-
 sample_point_location_field = ExtReferenceField(
     "SamplePointLocation",
     required=False,

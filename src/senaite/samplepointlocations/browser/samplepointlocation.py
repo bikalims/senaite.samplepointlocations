@@ -90,10 +90,10 @@ class SamplePointLocationView(ListingView):
         )
         Equipment_Id = obj.EquipmentID
         if Equipment_Id:
-            item["replace"]["equipment_id"] = Equipment_Id
+            item["equipment_id"] = Equipment_Id
         Equipment_Type = obj.EquipmentType
         if Equipment_Type:
-            item["replace"]["equipment_type"] = Equipment_Type
+            item["equipment_type"] = Equipment_Type
         return item
 
     def get_fields(self):
