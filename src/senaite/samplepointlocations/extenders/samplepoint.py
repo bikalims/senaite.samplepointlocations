@@ -84,6 +84,17 @@ equipment_type_field = ExtStringField(
     ),
 )
 
+equipment_description_field = ExtStringField(
+    "EquipmentDescription",
+    required=False,
+    mode="rw",
+    read_permission=View,
+    write_permission=FieldEditContact,
+    widget=StringWidget(
+        label=_(u"Equipment Description"),
+    ),
+)
+
 
 @implementer(IOrderableSchemaExtender, IBrowserLayerAwareExtender)
 class SamplePointSchemaExtender(object):
@@ -95,6 +106,7 @@ class SamplePointSchemaExtender(object):
         sample_point_location_field,
         equipment_id_field,
         equipment_type_field,
+        equipment_description_field
     ]
 
     def __init__(self, context):
@@ -125,6 +137,7 @@ class SamplePointSchemaExtender(object):
                         "modification_date",
                         "EquipmentID",
                         "EquipmentType",
+                        "EquipmentDescription",
                         "SamplingFrequency",
                         "SampleTypes",
                         "Composite",

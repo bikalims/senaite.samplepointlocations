@@ -42,6 +42,8 @@ class SamplePointLocationView(ListingView):
             (
                 ("system_id", dict(title=_("System ID"))),
                 ("location_title", dict(title=_("Title"), index="Title")),
+                ("equipment_id", dict(title=_("Equipment ID"),)),
+                ("equipment_type", dict(title=_("Equipment Type"),)),
             )
         )
 
@@ -74,7 +76,11 @@ class SamplePointLocationView(ListingView):
 
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
-        System_Id = obj.SystemId
+        try:
+            System_Id = obj.SystemId
+        except(AttributeError):
+            System_Id = ""
+
         if System_Id:
             item["replace"]["system_id"] = get_link(
                 href=api.get_url(obj), value=System_Id
@@ -82,6 +88,12 @@ class SamplePointLocationView(ListingView):
         item["replace"]["location_title"] = get_link(
             href=api.get_url(obj), value=obj.Title()
         )
+        Equipment_Id = obj.EquipmentID
+        if Equipment_Id:
+            item["replace"]["equipment_id"] = Equipment_Id
+        Equipment_Type = obj.EquipmentType
+        if Equipment_Type:
+            item["replace"]["equipment_type"] = Equipment_Type
         return item
 
     def get_fields(self):
