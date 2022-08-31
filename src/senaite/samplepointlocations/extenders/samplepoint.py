@@ -50,7 +50,7 @@ sample_point_location_field = ExtReferenceField(
             "sort_order": "ascending",
         },
         showOn=True,
-        visible={"edit": "hidden", "view": "visible"},
+        visible={"edit": "hidden", "view": "hidden"},
         ui_item="Title",
         colModel=[
             dict(columnName="UID", hidden=True),
