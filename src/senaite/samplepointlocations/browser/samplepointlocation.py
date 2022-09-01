@@ -42,6 +42,7 @@ class SamplePointLocationView(ListingView):
             (
                 ("system_id", dict(title=_("System ID"))),
                 ("location_title", dict(title=_("Title"), index="Title")),
+                ("sample_types", dict(title=_("Sample Type"),)),
                 ("equipment_id", dict(title=_("Equipment ID"),)),
                 ("equipment_type", dict(title=_("Equipment Type"),)),
             )
@@ -88,6 +89,11 @@ class SamplePointLocationView(ListingView):
         item["replace"]["location_title"] = get_link(
             href=api.get_url(obj), value=obj.Title()
         )
+        Sample_types = obj.getSampleTypes()
+        Type_titles = []
+        for sample_type in Sample_types:
+            Type_titles.append(sample_type.Title())
+        item["sample_types"] = Type_titles
         Equipment_Id = obj.EquipmentID
         if Equipment_Id:
             item["equipment_id"] = Equipment_Id
