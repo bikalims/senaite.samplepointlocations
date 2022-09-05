@@ -114,9 +114,15 @@ def get_samplepointlocation_info(obj, info, client_uid):
     # catalog queries for UI field filtering
     location_uid = api.get_uid(obj)
     sp_query = {
-        "getSamplePointLocationUID": [location_uid, None],
+        # "getSamplePointLocationUID": [location_uid, None],
         "getClientUID": [client_uid, ""],
     }
+    sp_UIDs = []
+    for sample_point in obj.values():
+        if sample_point.portal_type == "SamplePoint":
+            sp_UIDs.append(sample_point.UID())
+    # catalog queries for UI field filtering
+    sp_query["UID"] =  sp_UIDs
 
     filter_queries = {
         # Display Sample Points that have this sample type assigned plus
