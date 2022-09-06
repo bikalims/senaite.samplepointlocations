@@ -45,6 +45,7 @@ class SamplePointLocationView(ListingView):
                 ("sample_types", dict(title=_("Sample Type"),)),
                 ("equipment_id", dict(title=_("Equipment ID"),)),
                 ("equipment_type", dict(title=_("Equipment Type"),)),
+                ("equipment_description", dict(title=_("Equipment Description"),)),
             )
         )
 
@@ -100,6 +101,12 @@ class SamplePointLocationView(ListingView):
         Equipment_Type = obj.EquipmentType
         if Equipment_Type:
             item["equipment_type"] = Equipment_Type
+        try:
+            Equipment_Description = obj.EquipmentDescription
+        except(AttributeError):
+            Equipment_Description = ""
+        if Equipment_Description:
+            item["equipment_description"] = Equipment_Description
         return item
 
     def get_fields(self):
