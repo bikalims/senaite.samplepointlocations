@@ -16,7 +16,7 @@ long_description = "\n\n".join(
 
 setup(
     name="senaite.samplepointlocations",
-    version="1.0.3",
+    version="1.0.4",
     description="Two tier Sample Points",
     long_description=long_description,
     # Get more from https://pypi.org/classifiers/

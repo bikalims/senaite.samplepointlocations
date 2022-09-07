@@ -78,11 +78,7 @@ class SamplePointLocationView(ListingView):
 
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
-        try:
-            System_Id = obj.SystemId
-        except(AttributeError):
-            System_Id = ""
-
+        System_Id = obj.SystemId
         if System_Id:
             item["replace"]["system_id"] = get_link(
                 href=api.get_url(obj), value=System_Id
@@ -95,18 +91,9 @@ class SamplePointLocationView(ListingView):
         for sample_type in Sample_types:
             Type_titles.append(sample_type.Title())
         item["sample_types"] = Type_titles
-        Equipment_Id = obj.EquipmentID
-        if Equipment_Id:
-            item["equipment_id"] = Equipment_Id
-        Equipment_Type = obj.EquipmentType
-        if Equipment_Type:
-            item["equipment_type"] = Equipment_Type
-        try:
-            Equipment_Description = obj.EquipmentDescription
-        except(AttributeError):
-            Equipment_Description = ""
-        if Equipment_Description:
-            item["equipment_description"] = Equipment_Description
+        item["equipment_id"] = obj.EquipmentID
+        item["equipment_type"] = obj.EquipmentType
+        item["equipment_description"] = obj.EquipmentDescription
         return item
 
     def get_fields(self):
@@ -129,7 +116,7 @@ class SamplePointLocationView(ListingView):
                 man = api.get_object_by_uid(uid)
                 managers.append(man.getFullname())
         return [
-            {"title": "System Location ID", "value": self.context.SystemLocationsId},
+            {"title": "System Location ID", "value": self.context.system_location_id},
             {"title": "Account Managers", "value": ", ".join(managers)},
             {"title": "Address ", "value": ", ".join(address_lst)},
         ]

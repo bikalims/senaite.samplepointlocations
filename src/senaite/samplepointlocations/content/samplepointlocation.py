@@ -18,7 +18,7 @@ from zope.schema import TextLine
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
-    SystemLocationsId = TextLine(
+    system_location_id = TextLine(
         title=_("System Location ID"),
         required=False,
     )
