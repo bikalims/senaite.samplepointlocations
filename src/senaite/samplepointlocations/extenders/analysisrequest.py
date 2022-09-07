@@ -8,6 +8,7 @@ from Products.CMFCore.permissions import View
 from senaite.samplepointlocations.extenders.fields import ExtReferenceField
 from senaite.samplepointlocations.interfaces import ISenaiteSamplePointLocationsLayer
 from senaite.samplepointlocations import _
+from senaite.samplepointlocations import is_installed
 from .utils import ClientAwareReferenceWidget
 from zope.component import adapts
 from zope.interface import implementer
@@ -77,6 +78,7 @@ class AnalysisRequestSchemaModifier(object):
     def fiddle(self, schema):
         """
         """
-        schema['SamplePoint'].widget.label = "System"
+        if is_installed():
+            schema['SamplePoint'].widget.label = "System"
 
         return schema
