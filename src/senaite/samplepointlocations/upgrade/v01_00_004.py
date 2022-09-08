@@ -18,7 +18,7 @@ def upgrade(tool):
     return True
 
 
-def update_sample_points(portal, format_definition=None):
+def update_sample_points(portal):
     query = {
     "portal_type": "SamplePoint",
     }
@@ -28,7 +28,7 @@ def update_sample_points(portal, format_definition=None):
         obj.reindexObject()
 
 
-def update_sample_point_location(portal, format_definition=None):
+def update_sample_point_location(portal):
     query = {
     "portal_type": "SamplePointLocation",
     }
