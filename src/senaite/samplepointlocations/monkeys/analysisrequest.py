@@ -155,12 +155,13 @@ def get_samplepoint_info(obj, info, client_uid):
     # catalog queries for UI field filtering
     st_query = {"UID": UIDs}
 
-    filter_queries = {
-        # Display Sample Points that have this sample type assigned plus
-        # those that do not have a sample type assigned
-        "SampleType": st_query
-    }
-    info["filter_queries"] = filter_queries
+    if UIDs:
+        filter_queries = {
+            # Display Sample Points that have this sample type assigned plus
+            # those that do not have a sample type assigned
+            "SampleType": st_query
+        }
+        info["filter_queries"] = filter_queries
     if len(UIDs) == 1:
         sample_uid = UIDs[0]
         sample_title = api.get_object_by_uid(sample_uid).Title()
