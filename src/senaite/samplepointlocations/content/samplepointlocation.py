@@ -40,7 +40,7 @@ class ISamplePointLocation(model.Schema):
     )
     account_managers = UIDReferenceField(
         title=_(u"Account Managers"),
-        allowed_types=("Contact",),
+        allowed_types=("LabContact",),
         multi_valued=True,
         description=_(u"Sample point location manager/s"),
         required=False,
@@ -90,11 +90,8 @@ class SamplePointLocation(Container):
     @security.private
     def get_contacts_query(self):
         """Return the query for the account managers field"""
-        client_path = "/".join(self.aq_parent.getPhysicalPath())
-        # print("get_contacts_query: client_path = {}".format(client_path))
         return {
-            "portal_type": "Contact",
-            "path": {"query": client_path},
+            "portal_type": "LabContact",
             "is_active": True,
             "sort_on": "title",
             "sort_order": "asscending",
