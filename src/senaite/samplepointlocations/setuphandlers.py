@@ -4,7 +4,6 @@ from Products.CMFPlone.interfaces import INonInstallable
 from senaite.samplepointlocations import logger
 from senaite.samplepointlocations import PRODUCT_NAME
 from senaite.samplepointlocations import PROFILE_ID
-from senaite.core.catalog import SAMPLE_CATALOG
 from senaite.core.catalog import SETUP_CATALOG
 from senaite.core.setuphandlers import _run_import_step
 from senaite.core.setuphandlers import setup_other_catalogs
@@ -143,7 +142,6 @@ def setup_id_formatting(portal, format_definition=None):
 
 def setup_catalogs(portal):
     """Setup patient catalogs"""
-    # setup_core_catalogs(portal, catalog_classes=CATALOGS)
     setup_other_catalogs(portal, indexes=INDEXES, columns=COLUMNS)
 
 

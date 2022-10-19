@@ -15,6 +15,7 @@ from senaite.samplepointlocations import _
 from zope.interface import implementer
 from zope.schema import TextLine
 
+
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
@@ -48,7 +49,7 @@ class ISamplePointLocation(model.Schema):
     address = AddressField(
         title=_("Address"),
         address_types=[PHYSICAL_ADDRESS],
-    )    
+    )
 
 
 @implementer(ISamplePointLocation, IDeactivable)
@@ -74,6 +75,18 @@ class SamplePointLocation(Container):
         if fieldname not in schema:
             return None
         return schema[fieldname].set
+
+    @security.protected(permissions.View)
+    def get_system_location_id(self):
+        """Returns the system_location_id"""
+        accessor = self.accessor("system_location_id")
+        return accessor(self)
+
+    @security.protected(permissions.ModifyPortalContent)
+    def set_system_location_id(self, value):
+        """Set system_location_id by the field accessor"""
+        mutator = self.mutator("system_location_id")
+        return mutator(self, value)
 
     @security.protected(permissions.View)
     def getAddress(self):
