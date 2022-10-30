@@ -88,5 +88,16 @@
       visible="True">
     <permission value="Modify portal content"/>
   </action>
+  <action
+      action_id="spl"
+      category="object"
+      condition_expr=""
+      i18n:attributes="title"
+      i18n:domain="plone"
+      title="SamplePointLocations"
+      url_expr="string:${object_url}/../samplepointlocations"
+      visible="True">
+    <permission value="Modify portal content"/>
+  </action>
 
 </object>
