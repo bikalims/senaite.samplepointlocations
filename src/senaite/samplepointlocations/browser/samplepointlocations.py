@@ -35,7 +35,12 @@ class SamplePointLocationsView(ListingView):
 
         self.columns = collections.OrderedDict(
             (
-                ("system_location_id", dict(title=_("System Location ID"),)),
+                (
+                    "system_location_id",
+                    dict(
+                        title=_("System Location ID"),
+                    ),
+                ),
                 ("location_title", dict(title=_("Title"), index="Title")),
                 (
                     "location_managers",
@@ -86,13 +91,13 @@ class SamplePointLocationsView(ListingView):
             href=api.get_url(obj), value=obj.Title()
         )
         managers = []
-        if len(obj.account_managers) > 0:
+        if obj.account_managers and len(obj.account_managers) > 0:
             for uid in obj.account_managers:
                 man = api.get_object_by_uid(uid)
                 managers.append(man.getFullname())
             item["replace"]["location_managers"] = ", ".join(managers)
         address_lst = []
-        if len(obj.address) > 0:
+        if obj.address and len(obj.address) > 0:
             address = obj.address[0]
             if address.get("address"):
                 address_lst.append(address["address"])
@@ -107,5 +112,5 @@ class SamplePointLocationsView(ListingView):
         if address_lst:
             item["replace"]["location_address"] = get_link(
                 href=api.get_url(obj), value=", ".join(address_lst)
-        )
+            )
         return item

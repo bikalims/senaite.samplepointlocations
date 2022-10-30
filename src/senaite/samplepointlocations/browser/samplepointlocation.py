@@ -40,12 +40,32 @@ class SamplePointLocationView(ListingView):
 
         self.columns = collections.OrderedDict(
             (
-                ("system_id", dict(title=_("System ID"))),
+                ("SystemId", dict(title=_("System ID"))),
                 ("location_title", dict(title=_("Title"), index="Title")),
-                ("sample_types", dict(title=_("Sample Type"),)),
-                ("equipment_id", dict(title=_("Equipment ID"),)),
-                ("equipment_type", dict(title=_("Equipment Type"),)),
-                ("equipment_description", dict(title=_("Equipment Description"),)),
+                (
+                    "sample_types",
+                    dict(
+                        title=_("Sample Type"),
+                    ),
+                ),
+                (
+                    "equipment_id",
+                    dict(
+                        title=_("Equipment ID"),
+                    ),
+                ),
+                (
+                    "equipment_type",
+                    dict(
+                        title=_("Equipment Type"),
+                    ),
+                ),
+                (
+                    "equipment_description",
+                    dict(
+                        title=_("Equipment Description"),
+                    ),
+                ),
             )
         )
 
@@ -80,7 +100,7 @@ class SamplePointLocationView(ListingView):
         obj = api.get_object(obj)
         System_Id = obj.SystemId
         if System_Id:
-            item["replace"]["system_id"] = get_link(
+            item["replace"]["SystemId"] = get_link(
                 href=api.get_url(obj), value=System_Id
             )
         item["replace"]["location_title"] = get_link(
@@ -98,7 +118,7 @@ class SamplePointLocationView(ListingView):
 
     def get_fields(self):
         address_lst = []
-        if len(self.context.address) > 0:
+        if self.context.address and len(self.context.address) > 0:
             address = self.context.address[0]
             if address.get("address"):
                 address_lst.append(address["address"])
@@ -111,12 +131,15 @@ class SamplePointLocationView(ListingView):
             if address.get("country"):
                 address_lst.append(address["country"])
         managers = []
-        if len(self.context.account_managers) > 0:
+        if self.context.account_managers and len(self.context.account_managers) > 0:
             for uid in self.context.account_managers:
                 man = api.get_object_by_uid(uid)
                 managers.append(man.getFullname())
         return [
-            {"title": "System Location ID", "value": self.context.system_location_id},
+            {
+                "title": "System Location ID",
+                "value": self.context.get_system_location_id(),
+            },
             {"title": "Account Managers", "value": ", ".join(managers)},
             {"title": "Address ", "value": ", ".join(address_lst)},
         ]
