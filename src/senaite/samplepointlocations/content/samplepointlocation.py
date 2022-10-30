@@ -21,7 +21,7 @@ class ISamplePointLocation(model.Schema):
 
     system_location_id = TextLine(
         title=_("System Location ID"),
-        required=False,
+        required=True,
     )
     directives.widget(
         "account_managers",
@@ -75,6 +75,18 @@ class SamplePointLocation(Container):
         if fieldname not in schema:
             return None
         return schema[fieldname].set
+
+    @security.protected(permissions.View)
+    def get_account_managers(self):
+        """Returns the account_managers"""
+        accessor = self.accessor("account_managers")
+        return accessor(self)
+
+    @security.protected(permissions.ModifyPortalContent)
+    def set_account_managers(self, value):
+        """Set account_managers by the field accessor"""
+        mutator = self.mutator("account_managers")
+        return mutator(self, value)
 
     @security.protected(permissions.View)
     def get_system_location_id(self):
