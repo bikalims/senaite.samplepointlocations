@@ -21,7 +21,7 @@ class ISamplePointLocation(model.Schema):
 
     system_location_id = TextLine(
         title=_("System Location ID"),
-        required=False,
+        required=True,
     )
     directives.widget(
         "account_managers",
