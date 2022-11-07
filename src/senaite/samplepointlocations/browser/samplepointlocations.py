@@ -29,16 +29,16 @@ class SamplePointLocationsView(ListingView):
             self.portal_url, "/++resource++bika.lims.images", "sampletype_big.png"
         )
 
-        self.title = "System Locations"
+        self.title = "Sample Point Locations"
         self.description = self.context.Description()
         self.show_select_column = True
 
         self.columns = collections.OrderedDict(
             (
                 (
-                    "system_location_id",
+                    "sample_point_location_id",
                     dict(
-                        title=_("System Location ID"),
+                        title=_("Sample Point Location ID"),
                     ),
                 ),
                 ("location_title", dict(title=_("Title"), index="Title")),
@@ -82,10 +82,10 @@ class SamplePointLocationsView(ListingView):
 
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
-        System_location_Id = obj.system_location_id
-        if System_location_Id:
-            item["replace"]["system_location_id"] = get_link(
-                href=api.get_url(obj), value=System_location_Id
+        Sample_point_location_Id = obj.sample_point_location_id
+        if Sample_point_location_Id:
+            item["replace"]["sample_point_location_id"] = get_link(
+                href=api.get_url(obj), value=Sample_point_location_Id
             )
         item["replace"]["location_title"] = get_link(
             href=api.get_url(obj), value=obj.Title()

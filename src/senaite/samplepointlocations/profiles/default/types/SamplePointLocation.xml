@@ -7,7 +7,7 @@
   <!-- Basic properties -->
   <property
       i18n:translate=""
-      name="title">System Location</property>
+      name="title">Sample Point Location</property>
   <property
       i18n:translate=""
       name="description">A container of SamplePoints in an area</property>
@@ -94,7 +94,7 @@
       condition_expr=""
       i18n:attributes="title"
       i18n:domain="plone"
-      title="SamplePointLocations"
+      title="Sample Point Locations"
       url_expr="string:${object_url}/../samplepointlocations"
       visible="True">
     <permission value="Modify portal content"/>

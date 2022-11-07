@@ -24,8 +24,8 @@ def change_action_title(portal):
     actions = fti.listActions()
     for action in actions:
         if action.id == "samplepointlocations":
-            action.title = "System Locations"
-            logger.info("Changed action title to System Location")
+            action.title = "Sample Point Locations"
+            logger.info("Changed action title back to Sample Point Locations")
         if action.id == "samplepoints":
-            action.title = "Systems"
-            logger.info("Changed action title to System Location")
+            action.title = "Sample Points"
+            logger.info("Changed action title back to Sample Points")
