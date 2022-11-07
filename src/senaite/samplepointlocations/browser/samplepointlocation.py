@@ -98,19 +98,19 @@ class SamplePointLocationView(ListingView):
 
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
-        Sample_Point_Id = obj.SamplePointId
-        if Sample_Point_Id:
+        sample_point_id = obj.SamplePointId
+        if sample_point_id:
             item["replace"]["SamplePointId"] = get_link(
-                href=api.get_url(obj), value=Sample_Point_Id
+                href=api.get_url(obj), value=sample_point_id
             )
         item["replace"]["location_title"] = get_link(
             href=api.get_url(obj), value=obj.Title()
         )
-        Sample_types = obj.getSampleTypes()
-        Type_titles = []
-        for sample_type in Sample_types:
-            Type_titles.append(sample_type.Title())
-        item["sample_types"] = Type_titles
+        sample_types = obj.getSampleTypes()
+        type_titles = []
+        for sample_type in sample_types:
+            type_titles.append(sample_type.Title())
+        item["sample_types"] = type_titles
         item["equipment_id"] = obj.EquipmentID
         item["equipment_type"] = obj.EquipmentType
         item["equipment_description"] = obj.EquipmentDescription
