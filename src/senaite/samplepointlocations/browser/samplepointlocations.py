@@ -42,6 +42,7 @@ class SamplePointLocationsView(ListingView):
                     ),
                 ),
                 ("location_title", dict(title=_("Title"), index="Title")),
+                ("summary", dict(title=_("Summary"))),
                 (
                     "location_managers",
                     dict(title=_("Managers"), index="getManagers"),
@@ -90,6 +91,7 @@ class SamplePointLocationsView(ListingView):
         item["replace"]["location_title"] = get_link(
             href=api.get_url(obj), value=obj.Title()
         )
+        item["summary"] = obj.description
         managers = []
         if obj.account_managers and len(obj.account_managers) > 0:
             for uid in obj.account_managers:

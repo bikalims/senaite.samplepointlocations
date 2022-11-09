@@ -142,4 +142,8 @@ class SamplePointLocationView(ListingView):
             },
             {"title": "Account Managers", "value": ", ".join(managers)},
             {"title": "Address ", "value": ", ".join(address_lst)},
+            {
+                "title": "Summary",
+                "value": self.context.description,
+            },
         ]
