@@ -23,11 +23,10 @@ class SamplesListingViewAdapter(object):
             (
                 (
                     "location",
-                    dict(title=_("System Location"), sortable=False, toggle=True),
+                    dict(title=_("Sample Point Location"), sortable=False, toggle=True),
                 ),
             )
         )
-        self.listing.columns['getSamplePointTitle']['title'] = "System"
         self.listing.columns.update(new_columns)
 
         # Apply the columns to all review_states

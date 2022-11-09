@@ -19,8 +19,8 @@ from zope.schema import TextLine
 class ISamplePointLocation(model.Schema):
     """Marker interface and Dexterity Python Schema for SamplePointLocation"""
 
-    system_location_id = TextLine(
-        title=_("System Location ID"),
+    sample_point_location_id = TextLine(
+        title=_("Sample Point Location ID"),
         required=True,
     )
     directives.widget(
@@ -89,15 +89,15 @@ class SamplePointLocation(Container):
         return mutator(self, value)
 
     @security.protected(permissions.View)
-    def get_system_location_id(self):
-        """Returns the system_location_id"""
-        accessor = self.accessor("system_location_id")
+    def get_sample_point_location_id(self):
+        """Returns the sample_point_location_id"""
+        accessor = self.accessor("sample_point_location_id")
         return accessor(self)
 
     @security.protected(permissions.ModifyPortalContent)
-    def set_system_location_id(self, value):
-        """Set system_location_id by the field accessor"""
-        mutator = self.mutator("system_location_id")
+    def set_sample_point_location_id(self, value):
+        """Set sample_point_location_id by the field accessor"""
+        mutator = self.mutator("sample_point_location_id")
         return mutator(self, value)
 
     @security.protected(permissions.View)

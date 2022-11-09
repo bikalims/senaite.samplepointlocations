@@ -27,7 +27,7 @@ location_field = ExtReferenceField(
     # edit_accessor="getSamplePointLocation",
     # mutator="setSamplePointLocation",
     widget=ClientAwareReferenceWidget(
-        label=_(u"System Location"),
+        label=_(u"Sample Point Location"),
         render_own_label=True,
         size=20,
         catalog_name=SETUP_CATALOG,
@@ -79,6 +79,6 @@ class AnalysisRequestSchemaModifier(object):
         """
         """
         if is_installed():
-            schema['SamplePoint'].widget.label = "System"
+            schema['SamplePoint'].widget.label = "Sample Point"
 
         return schema

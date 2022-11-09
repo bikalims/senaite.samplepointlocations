@@ -17,15 +17,15 @@ from .utils import ClientAwareReferenceWidget
 from zope.component import adapts
 from zope.interface import implementer
 
-system_id_field = ExtStringField(
-    "SystemId",
+sample_point_id_field = ExtStringField(
+    "SamplePointId",
     required=False,
     mode="rw",
     read_permission=View,
     write_permission=FieldEditContact,
     widget=StringWidget(
         size=30,
-        label=_(u"System ID"),
+        label=_(u"Sample Point ID"),
     ),
 )
 
@@ -101,7 +101,7 @@ class SamplePointSchemaExtender(object):
     layer = ISenaiteSamplePointLocationsLayer
 
     fields = [
-        system_id_field,
+        sample_point_id_field,
         sample_point_location_field,
         equipment_id_field,
         equipment_type_field,
@@ -118,7 +118,7 @@ class SamplePointSchemaExtender(object):
                 (
                     "default",
                     [
-                        "SystemId",
+                        "SamplePointId",
                         "id",
                         "title",
                         "allowDiscussion",

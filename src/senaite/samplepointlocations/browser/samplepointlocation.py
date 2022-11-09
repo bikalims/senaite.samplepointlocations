@@ -34,13 +34,13 @@ class SamplePointLocationView(ListingView):
             self.portal_url, "/++resource++bika.lims.images", "sampletype_big.png"
         )
 
-        self.title = "Systems"
+        self.title = "Sample Points"
         self.description = self.context.Description()
         self.show_select_column = True
 
         self.columns = collections.OrderedDict(
             (
-                ("SystemId", dict(title=_("System ID"))),
+                ("SamplePointId", dict(title=_("Sample Point ID"))),
                 ("location_title", dict(title=_("Title"), index="Title")),
                 (
                     "sample_types",
@@ -98,19 +98,19 @@ class SamplePointLocationView(ListingView):
 
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
-        System_Id = obj.SystemId
-        if System_Id:
-            item["replace"]["SystemId"] = get_link(
-                href=api.get_url(obj), value=System_Id
+        sample_point_id = obj.SamplePointId
+        if sample_point_id:
+            item["replace"]["SamplePointId"] = get_link(
+                href=api.get_url(obj), value=sample_point_id
             )
         item["replace"]["location_title"] = get_link(
             href=api.get_url(obj), value=obj.Title()
         )
-        Sample_types = obj.getSampleTypes()
-        Type_titles = []
-        for sample_type in Sample_types:
-            Type_titles.append(sample_type.Title())
-        item["sample_types"] = Type_titles
+        sample_types = obj.getSampleTypes()
+        type_titles = []
+        for sample_type in sample_types:
+            type_titles.append(sample_type.Title())
+        item["sample_types"] = type_titles
         item["equipment_id"] = obj.EquipmentID
         item["equipment_type"] = obj.EquipmentType
         item["equipment_description"] = obj.EquipmentDescription
@@ -137,8 +137,8 @@ class SamplePointLocationView(ListingView):
                 managers.append(man.getFullname())
         return [
             {
-                "title": "System Location ID",
-                "value": self.context.get_system_location_id(),
+                "title": "Sample Point Location ID",
+                "value": self.context.get_sample_point_location_id(),
             },
             {"title": "Account Managers", "value": ", ".join(managers)},
             {"title": "Address ", "value": ", ".join(address_lst)},
