@@ -34,7 +34,26 @@ def sp_location_title(instance):
 def sp_location_uid(instance):
     try:
         loc = instance.getSamplePointLocation()
-        return loc.UID()
+        if loc:
+            return loc.UID()
     except Exception:
         logger.info("sp_location_uid: failed")
+        return ""
+
+
+@indexer(ISamplePointLocation)
+def sp_location_id(instance):
+    try:
+        return instance.sample_point_location_id
+    except Exception:
+        logger.info("sp_location_id: failed")
+        return ""
+
+
+@indexer(ISamplePointLocation)
+def sp_location_account_managers(instance):
+    try:
+        return instance.account_managers
+    except Exception:
+        logger.info("sp_location_account_managers: failed")
         return ""

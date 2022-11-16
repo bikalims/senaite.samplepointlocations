@@ -18,7 +18,10 @@ class SamplePointLocationView(ListingView):
         self.catalog = SETUP_CATALOG
         path = api.get_path(self.context)
         self.contentFilter = dict(
-            portal_type="SamplePoint", sort_on="sortable_title", sort_order="ascending", path={"query": path}
+            portal_type="SamplePoint",
+            sort_on="sortable_title",
+            sort_order="ascending",
+            path={"query": path},
         )
         self.form_id = "locations"
 
@@ -138,7 +141,7 @@ class SamplePointLocationView(ListingView):
         return [
             {
                 "title": "Sample Point Location ID",
-                "value": self.context.get_sample_point_location_id(),
+                "value": self.context.getSamplePointLocationID(),
             },
             {"title": "Account Managers", "value": ", ".join(managers)},
             {"title": "Address ", "value": ", ".join(address_lst)},

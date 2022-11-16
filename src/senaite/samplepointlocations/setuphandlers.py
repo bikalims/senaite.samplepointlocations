@@ -14,12 +14,16 @@ from zope.interface import implementer
 INDEXES = [
     (SETUP_CATALOG, "getSamplePointLocation", "", "FieldIndex"),
     (SETUP_CATALOG, "getSamplePointLocationUID", "", "FieldIndex"),
+    ("portal_catalog", "getSamplePointLocationID", "", "FieldIndex"),
+    ("portal_catalog", "getAccountManagers", "", "KeywordIndex"),
 ]
 
 # Tuples of (catalog, column_name)
 COLUMNS = [
     (SETUP_CATALOG, "getSamplePointLocation"),
     (SETUP_CATALOG, "getSamplePointLocationUID"),
+    ("portal_catalog", "getSamplePointLocationID"),
+    ("portal_catalog", "getAccountManagers"),
 ]
 
 NAVTYPES = []

@@ -8,6 +8,8 @@
     <adapter name="getSamplePointLocation" factory=".indexers.ar_location_title"/>
     <adapter name="getSamplePointLocation" factory=".indexers.sp_location_title"/>
     <adapter name="getSamplePointLocationUID" factory=".indexers.sp_location_uid"/>
+    <adapter name="getSamplePointLocationID" factory=".indexers.sp_location_id"/>
+    <adapter name="getAccountManagers" factory=".indexers.sp_location_account_managers"/>
 
 </configure>
 

@@ -77,25 +77,25 @@ class SamplePointLocation(Container):
         return schema[fieldname].set
 
     @security.protected(permissions.View)
-    def get_account_managers(self):
+    def getAccountManagers(self):
         """Returns the account_managers"""
         accessor = self.accessor("account_managers")
         return accessor(self)
 
     @security.protected(permissions.ModifyPortalContent)
-    def set_account_managers(self, value):
+    def setAccountManagers(self, value):
         """Set account_managers by the field accessor"""
         mutator = self.mutator("account_managers")
         return mutator(self, value)
 
     @security.protected(permissions.View)
-    def get_sample_point_location_id(self):
+    def getSamplePointLocationID(self):
         """Returns the sample_point_location_id"""
         accessor = self.accessor("sample_point_location_id")
         return accessor(self)
 
     @security.protected(permissions.ModifyPortalContent)
-    def set_sample_point_location_id(self, value):
+    def setSamplePointLocationID(self, value):
         """Set sample_point_location_id by the field accessor"""
         mutator = self.mutator("sample_point_location_id")
         return mutator(self, value)
