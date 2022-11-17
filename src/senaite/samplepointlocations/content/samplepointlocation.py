@@ -74,7 +74,9 @@ class SamplePointLocation(Container):
         schema = api.get_schema(self)
         if fieldname not in schema:
             return None
-        return schema[fieldname].set
+        result = schema[fieldname].set
+        self.reindexObject()
+        return result
 
     @security.protected(permissions.View)
     def getAccountManagers(self):

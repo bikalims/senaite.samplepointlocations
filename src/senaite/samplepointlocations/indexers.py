@@ -57,3 +57,12 @@ def sp_location_account_managers(instance):
     except Exception:
         logger.info("sp_location_account_managers: failed")
         return ""
+
+
+@indexer(ISamplePoint)
+def sp_id(instance):
+    try:
+        return instance.SamplePointId
+    except Exception:
+        logger.info("sp_id: failed")
+        return ""

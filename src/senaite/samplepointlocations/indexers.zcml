@@ -10,6 +10,7 @@
     <adapter name="getSamplePointLocationUID" factory=".indexers.sp_location_uid"/>
     <adapter name="getSamplePointLocationID" factory=".indexers.sp_location_id"/>
     <adapter name="getAccountManagers" factory=".indexers.sp_location_account_managers"/>
+    <adapter name="getSamplePointID" factory=".indexers.sp_id"/>
 
 </configure>
 
