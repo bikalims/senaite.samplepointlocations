@@ -20,9 +20,9 @@
              provides="archetypes.schemaextender.interfaces.ISchemaModifier"
              factory=".samplepoint.SamplePointSchemaModifier"/>
 
-    <adapter name="senaite.samplepointlocations.labcontact.schemaextended"
+    <adapter name="senaite.samplepointlocations.contact.schemaextended"
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
-             factory=".labcontact.LabContactSchemaExtender"/>
+             factory=".contact.ContactSchemaExtender"/>
 
     <subscriber
             for="bika.lims.interfaces.ISamplePoint

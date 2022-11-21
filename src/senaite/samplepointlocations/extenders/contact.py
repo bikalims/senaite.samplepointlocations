@@ -1,7 +1,7 @@
 from archetypes.schemaextender.interfaces import IBrowserLayerAwareExtender
 from archetypes.schemaextender.interfaces import IOrderableSchemaExtender
 from bika.lims import FieldEditContact
-from bika.lims.interfaces import ILabContact
+from bika.lims.interfaces import IContact
 from .fields import ExtStringField
 from Products.Archetypes.Widget import StringWidget
 from Products.CMFCore.permissions import View
@@ -24,8 +24,8 @@ contact_id_field = ExtStringField(
 
 
 @implementer(IOrderableSchemaExtender, IBrowserLayerAwareExtender)
-class LabContactSchemaExtender(object):
-    adapts(ILabContact)
+class ContactSchemaExtender(object):
+    adapts(IContact)
     layer = ISenaiteSamplePointLocationsLayer
 
     fields = [
