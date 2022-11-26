@@ -86,3 +86,4 @@ License
 -------
 
 The project is licensed by the Bika Open Source LIMS Collective, https://www.bikalims.org, under the GPLv2. 
+Copyright (C) 2019 Bika Lab Systems https://www.bikalabs.com/
