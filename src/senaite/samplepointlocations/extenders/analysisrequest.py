@@ -78,7 +78,4 @@ class AnalysisRequestSchemaModifier(object):
     def fiddle(self, schema):
         """
         """
-        if is_installed():
-            schema['SamplePoint'].widget.label = "Sample Point"
-
         return schema
