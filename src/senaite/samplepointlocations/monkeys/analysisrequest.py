@@ -112,7 +112,7 @@ def get_samplepointlocation_info(obj, info, client_uid):
     """Returns the client info of an object"""
 
     # catalog queries for UI field filtering
-    location_uid = api.get_uid(obj)
+    # location_uid = api.get_uid(obj)
     sp_query = {
         # "getSamplePointLocationUID": [location_uid, None],
         "getClientUID": [client_uid, ""],
@@ -122,7 +122,7 @@ def get_samplepointlocation_info(obj, info, client_uid):
         if sample_point.portal_type == "SamplePoint":
             sp_UIDs.append(sample_point.UID())
     # catalog queries for UI field filtering
-    sp_query["UID"] =  sp_UIDs
+    sp_query["UID"] = sp_UIDs
 
     filter_queries = {
         # Display Sample Points that have this sample type assigned plus
@@ -133,11 +133,10 @@ def get_samplepointlocation_info(obj, info, client_uid):
 
     def get_account_managers_emailaddreses(account_managers):
         emails = []
-        for index, uid in enumerate(account_managers):
-            man = api.get_object_by_uid(uid)
-            emails.append(man.getEmailAddress())
+        for index, contact in enumerate(account_managers):
+            emails.append(contact.getEmailAddress())
         return emails
-    ac_man_emails = get_account_managers_emailaddreses(obj.account_managers)
+    ac_man_emails = get_account_managers_emailaddreses(obj.getAccountManagers())
 
     info["field_values"].update(
         {"CCEmails": {"value": ac_man_emails, "if_empty": True}}
