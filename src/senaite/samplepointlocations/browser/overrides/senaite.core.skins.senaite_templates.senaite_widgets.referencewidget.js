@@ -15,6 +15,7 @@
         $("input[name='" + fieldName + "']").attr("uid", existing_uids.join(","));
         $(this).parent().remove();
       }
+      // console.log('Ref Widget deleted: ' + fieldName);
     });
 
     $(".ArchetypesReferenceWidget").bind("selected blur change", function () {
@@ -27,7 +28,24 @@
         $("input[name^='" + fieldName + "_uid']").val("");
         $("div[name='" + fieldName + "-listing']").empty();
       }
+      // console.log('Ref Widget changed: ' + this.id);
     });
+
+    $(".ArchetypesClientAwareReferenceWidget").bind("selected blur change", function () {
+      var fieldName = $(this).attr("data-fieldName");
+      if (fieldName != 'SamplePointLocation') {
+        return;
+      }
+      // Special case for SamplePointLocation
+      // console.log('Client Aware Ref Widget changed: ' + this.id);
+      var sp = $("#SamplePoint")
+      sp.val("");
+      var sp_uid = $("#SamplePoint_uid")
+      sp_uid.val("");
+      var spl = $("#SamplePointLocation")
+      referencewidget_lookups([spl.get(0), sp.get(0)]);
+    });
+
     save_UID_check();
     check_UID_check();
     check_missing_UID();
@@ -48,6 +66,7 @@ function referencewidget_lookups(elements) {
   // Any reference widgets that don't already have combogrid widgets
   var inputs;
   if (elements === undefined) {
+    // console.log('referencewidget_lookups: elements is undefined');
     original = $(".ArchetypesReferenceWidget [combogrid_options]").not(".has_combogrid_widget");
     custom = $(".ArchetypesClientAwareReferenceWidget [combogrid_options]").not(".has_combogrid_widget");
     inputs = [...original, ...custom];
@@ -55,9 +74,21 @@ function referencewidget_lookups(elements) {
   else {
     inputs = elements;
   }
-  console.log('referencewidget_lookups: num elements found is ' + inputs.length);
+  // console.log('referencewidget_lookups: num elements found is ' + inputs.length);
+  var sample_point_location_uid
   for (var i = inputs.length - 1; i >= 0; i--) {
     var element = inputs[i];
+    // console.log('referencewidget_lookups: element ' + element.id);
+    if (element.id == 'SamplePointLocation') {
+      sample_point_location_uid = $(element).attr("uid");
+      // console.log("SamplePointLocation UID: " + sample_point_location_uid);
+    }
+  }
+
+  for (var i = inputs.length - 1; i >= 0; i--) {
+    var element = inputs[i];
+    // console.log('referencewidget_lookups: element ' + element.id);
+
     var options = JSON.parse($(element).attr("combogrid_options"));
     if (!options) {
       continue;
@@ -139,7 +170,13 @@ function referencewidget_lookups(elements) {
     options.url = options.url + "?_authenticator=" + $("input[name='_authenticator']").val();
     options.url = options.url + "&catalog_name=" + $(element).attr("catalog_name");
     options.url = options.url + "&base_query=" + $(element).attr("base_query");
-    options.url = options.url + "&search_query=" + $(element).attr("search_query");
+    if (element.id == 'SamplePoint' && sample_point_location_uid != "") {
+      search_query = '&search_query={"getSamplePointLocationUID": "' + sample_point_location_uid + '"}';
+      // console.log(element.id + ": " + search_query)
+    } else {
+      search_query = "&search_query=" + $(element).attr("search_query");
+    };
+    options.url = options.url + search_query
     options.url = options.url + "&colModel=" + JSON.stringify(JSON.parse($(element).attr("combogrid_options")).colModel);
     options.url = options.url + "&search_fields=" + JSON.stringify(JSON.parse($(element).attr("combogrid_options")).search_fields);
     options.url = options.url + "&discard_empty=" + JSON.stringify(JSON.parse($(element).attr("combogrid_options")).discard_empty);
