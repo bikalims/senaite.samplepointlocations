@@ -21,7 +21,7 @@ class ClientAwareReferenceWidget(ReferenceWidget):
 
         # portal_type: use field allowed types
         field = context.Schema().getField(fieldName)
-        allowed_types = getattr(field, "allowed_types", None)
+        allowed_types = getattr(field, "allowed_types", [])
         allowed_types_method = getattr(field, "allowed_types_method", None)
         if allowed_types_method:
             meth = getattr(context, allowed_types_method)
@@ -42,7 +42,7 @@ class ClientAwareReferenceWidget(ReferenceWidget):
                 base_query["getParentUID"] = [client_uid]
             else:
                 base_query["getClientUID"] = [client_uid, ""]
-        return json.dumps(base_query)
+        return base_query
 
 
 registerWidget(ClientAwareReferenceWidget, title="Client aware Reference Widget")
