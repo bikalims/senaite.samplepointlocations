@@ -14,6 +14,7 @@ from senaite import api
 from senaite.samplepointlocations import _
 from zope.interface import implementer
 from zope.schema import TextLine
+from senaite.core.catalog import CONTACT_CATALOG
 
 
 class ISamplePointLocation(model.Schema):
@@ -26,7 +27,7 @@ class ISamplePointLocation(model.Schema):
     directives.widget(
         "account_managers",
         UIDReferenceWidgetFactory,
-        catalog="portal_catalog",
+        catalog=CONTACT_CATALOG,
         query="get_contacts_query",
         display_template="<a href='${url}'>${title}</a>",
         columns=[

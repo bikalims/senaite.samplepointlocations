@@ -1,6 +1,5 @@
 from bika.lims.interfaces import IAddSampleFieldsFlush
 from bika.lims.interfaces import IAddSampleObjectInfo
-from collections import OrderedDict
 from senaite import api
 from senaite.samplepointlocations import check_installed
 from senaite.samplepointlocations import logger
@@ -8,24 +7,16 @@ from zope.component import getAdapters
 
 
 def get_record_metadata(self, record):
-    """Returns the metadata for the record passed in"""
-    metadata = OrderedDict()
+    """Returns the metadata for the record passed in
+    """
+    metadata = {}
     extra_fields = {}
     for key, value in record.items():
-        if not key.endswith("_uid"):
-            continue
-
-        # This is a reference field (ends with _uid), so we add the
-        # metadata key, even if there is no way to handle objects this
-        # field refers to
-        metadata_key = key.replace("_uid", "")
-        metadata_key = "{}_metadata".format(metadata_key.lower())
+        metadata_key = "{}_metadata".format(key.lower())
         metadata[metadata_key] = {}
 
         if not value:
             continue
-
-        logger.debug("------get_record_metadata: {}".format(metadata_key))
 
         # Get objects information (metadata)
         objs_info = self.get_objects_info(record, key)
@@ -52,7 +43,8 @@ def get_record_metadata(self, record):
         obj = self.get_object_by_uid(uid)
         if not obj:
             continue
-        obj_info = self.get_object_info(obj, field_name, record=extra_fields)
+        obj_info = self.get_object_info(
+            obj, field_name, record=extra_fields)
         if not obj_info or "uid" not in obj_info:
             continue
         metadata[key] = {obj_info["uid"]: obj_info}
@@ -77,13 +69,15 @@ def get_object_info(self, obj, key, record=None):
     :return: dict that represents the object
     """
     # Check if there is a function to handle objects for this field
-    field_name = key.replace("_uid", "")
+    field_name = key
     func_name = "get_{}_info".format(field_name.lower())
-    logger.debug("get_object_info: func_name = {}".format(func_name))
+    func = getattr(self, func_name, None)
+
     # always ensure we have a record
     if record is None:
         record = {}
 
+    # Get the info for each object
     if func_name == "get_samplepointlocation_info":
         info = self.get_base_info(obj)
         client = self.get_client()
@@ -100,8 +94,8 @@ def get_object_info(self, obj, key, record=None):
         info = callable(func) and func(obj) or self.get_base_info(obj)
 
     # Check if there is any adapter to handle objects for this field
-    for name, adapter in getAdapters((obj,), IAddSampleObjectInfo):
-        logger.debug("adapter for '{}': {}".format(field_name, name))
+    for name, adapter in getAdapters((obj, ), IAddSampleObjectInfo):
+        logger.info("adapter for '{}': {}".format(field_name, name))
         ad_info = adapter.get_object_info_with_record(record)
         self.update_object_info(info, ad_info)
 
@@ -172,7 +166,8 @@ def get_samplepoint_info(obj, info, client_uid):
 
 
 def get_client_info(self, obj):
-    """Returns the client info of an object"""
+    """Returns the client info of an object
+    """
     info = self.get_base_info(obj)
 
     # Set the default contact, but only if empty. The Contact field is
@@ -182,21 +177,26 @@ def get_client_info(self, obj):
     if default_contact:
         contact_info = self.get_contact_info(default_contact)
         contact_info.update({"if_empty": True})
-        info["field_values"].update({"Contact": contact_info})
+        info["field_values"].update({
+            "Contact": contact_info
+        })
 
     # Set default CC Email field
-    info["field_values"].update(
-        {"CCEmails": {"value": obj.getCCEmails(), "if_empty": True}}
-    )
+    info["field_values"].update({
+        "CCEmails": {"value": obj.getCCEmails(), "if_empty": True}
+    })
 
     # UID of the client
     uid = api.get_uid(obj)
 
     # catalog queries for UI field filtering
     filter_queries = {
-        "Contact": {"getParentUID": [uid]},
-        "CCContact": {"getParentUID": [uid]},
-        "InvoiceContact": {"getParentUID": [uid]},
+        "Contact": {
+            "getParentUID": [uid]
+        },
+        "CCContact": {
+            "getParentUID": [uid]
+        },
         "SamplePoint": {
             "getClientUID": [uid, ""],
         },
