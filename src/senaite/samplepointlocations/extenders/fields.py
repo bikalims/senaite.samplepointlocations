@@ -20,6 +20,7 @@
 import six
 from archetypes.schemaextender.interfaces import IExtensionField
 from Products.Archetypes import public
+from bika.lims.browser.fields.uidreferencefield import UIDReferenceField
 from senaite.core.browser.fields.datetime import DateTimeField
 from senaite.core.browser.fields.record import RecordField
 from senaite.core.browser.fields.records import RecordsField
@@ -112,6 +113,10 @@ class ExtRecordsField(ExtensionField, RecordsField):
 
 
 class ExtReferenceField(ExtensionField, public.ReferenceField):
+    "Field extender"
+
+
+class ExtUIDReferenceField(ExtensionField, UIDReferenceField):
     "Field extender"
 
 

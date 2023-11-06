@@ -5,16 +5,16 @@ from bika.lims import FieldEditContact
 from bika.lims import SETUP_CATALOG
 from bika.lims.interfaces import IAnalysisRequest
 from Products.CMFCore.permissions import View
-from senaite.samplepointlocations.extenders.fields import ExtReferenceField
+from senaite.samplepointlocations.extenders.fields import ExtUIDReferenceField
 from senaite.samplepointlocations.interfaces import ISenaiteSamplePointLocationsLayer
 from senaite.samplepointlocations import _
 from senaite.samplepointlocations import is_installed
-from .utils import ClientAwareReferenceWidget
+from senaite.core.browser.widgets.referencewidget import ReferenceWidget
 from zope.component import adapts
 from zope.interface import implementer
 from zope.interface import implements
 
-location_field = ExtReferenceField(
+location_field = ExtUIDReferenceField(
     "SamplePointLocation",
     required=False,
     allowed_types=("SamplePointLocation",),
@@ -26,7 +26,7 @@ location_field = ExtReferenceField(
     # accessor="getSamplePointLocation",
     # edit_accessor="getSamplePointLocation",
     # mutator="setSamplePointLocation",
-    widget=ClientAwareReferenceWidget(
+    widget=ReferenceWidget(
         label=_(u"Sample Point Location"),
         render_own_label=True,
         size=20,

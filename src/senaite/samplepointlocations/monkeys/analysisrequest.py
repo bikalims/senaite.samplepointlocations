@@ -11,15 +11,22 @@ def get_record_metadata(self, record):
     """
     metadata = {}
     extra_fields = {}
-    for key, value in record.items():
+    client_metadata = {}
+
+    keys = sorted(record.keys())
+    for key in keys:
+        value =  record[key]
         metadata_key = "{}_metadata".format(key.lower())
         metadata[metadata_key] = {}
 
         if not value:
+            logger.info("get_record_metadata:key {}".format(key))
             continue
 
         # Get objects information (metadata)
-        objs_info = self.get_objects_info(record, key)
+        objs_info = self.get_objects_info(record, key, client_metadata)
+        if key == "Client":
+            client_metadata = objs_info[0]
         objs_uids = map(lambda obj: obj["uid"], objs_info)
         metadata[metadata_key] = dict(zip(objs_uids, objs_info))
 
@@ -62,7 +69,7 @@ def get_record_metadata(self, record):
     return metadata
 
 
-def get_object_info(self, obj, key, record=None):
+def get_object_info(self, obj, key, record=None, client_metadata={}):
     """Returns the object info metadata for the passed in object and key
     :param obj: the object from which extract the info from
     :param key: The key of the field from the record (e.g. Client_uid)
@@ -82,7 +89,7 @@ def get_object_info(self, obj, key, record=None):
         info = self.get_base_info(obj)
         client = self.get_client()
         client_uid = client and api.get_uid(client) or ""
-        info = get_samplepointlocation_info(obj, info, client_uid)
+        info = get_samplepointlocation_info(obj, info, client_uid, client_metadata=client_metadata)
     elif func_name == "get_samplepoint_info":
         info = self.get_base_info(obj)
         client = self.get_client()
@@ -102,14 +109,14 @@ def get_object_info(self, obj, key, record=None):
     return info
 
 
-def get_samplepointlocation_info(obj, info, client_uid):
+def get_samplepointlocation_info(obj, info, client_uid, client_metadata={}):
     """Returns the client info of an object"""
 
     # catalog queries for UI field filtering
     # location_uid = api.get_uid(obj)
     sp_query = {
         # "getSamplePointLocationUID": [location_uid, None],
-        "getClientUID": [client_uid, ""],
+        # "getClientUID": [client_uid, ""],
     }
     sp_UIDs = []
     for sample_point in obj.values():
@@ -124,6 +131,10 @@ def get_samplepointlocation_info(obj, info, client_uid):
         "SamplePoint": sp_query
     }
     info["filter_queries"] = filter_queries
+    # update client_metadata info
+    if client_metadata:
+        client_metadata["filter_queries"]["SamplePoint"] = sp_query
+
 
     def get_account_managers_emailaddreses(account_managers):
         emails = []
@@ -165,6 +176,24 @@ def get_samplepoint_info(obj, info, client_uid):
     return info
 
 
+def get_objects_info(self, record, key, client_metadata):
+    """
+    Returns a list with the metadata for the objects the field with
+    field_name passed in refers to. Returns empty list if the field is not
+    a reference field or the record for this key cannot be handled
+    :param record: a record for a single sample (column)
+    :param key: The key of the field from the record (e.g. Client_uid)
+    :return: list of info objects
+    """
+    # Get the objects from this record. Returns a list because the field
+    # can be multivalued
+    uids = self.get_uids_from_record(record, key)
+    objects = map(self.get_object_by_uid, uids)
+    objects = map(lambda obj: self.get_object_info(
+        obj, key, record=record, client_metadata=client_metadata), objects)
+    return filter(None, objects)
+
+
 def get_client_info(self, obj):
     """Returns the client info of an object
     """
@@ -199,6 +228,7 @@ def get_client_info(self, obj):
         },
         "SamplePoint": {
             "getClientUID": [uid, ""],
+            # "getSamplePointLocationUID": [uid, ""],
         },
         "Template": {
             "getClientUID": [uid, ""],
