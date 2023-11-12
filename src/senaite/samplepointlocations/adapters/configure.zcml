@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+
+  <!-- ClientAwareReferenceWidgetVocabulary
+       Injects getClientUID or getParentUID as additional search criteria for
+       client-bound reference fields -->
+  <adapter
+      for="senaite.samplepointlocations.content.samplepointlocation.ISamplePointLocation
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="senaite.samplepointlocations.adapters.referencewidget.vocabularies.ClientAwareReferenceWidgetVocabulary"
+      provides="senaite.core.interfaces.IReferenceWidgetVocabulary" />
+
+
+</configure>
+
