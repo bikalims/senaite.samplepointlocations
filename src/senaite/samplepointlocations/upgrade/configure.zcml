@@ -1,7 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="senaite.crms">
+    i18n_domain="senaite.samplepointlocations">
 
  <genericsetup:upgradeStep
      title="Upgrade to SENAITE SAMPLELOCATIONS 1.0.1"
@@ -10,5 +10,14 @@
      destination="1.0.1"
      handler="senaite.samplepointlocations.upgrade.v01_00_001.upgrade"
      profile="senaite.samplepointlocations:default"/>
+
+ <genericsetup:upgradeStep
+     title="Upgrade to SENAITE SAMPLELOCATIONS 1.0.2"
+     description=""
+     source="1.0.1"
+     destination="1.0.2"
+     handler="senaite.samplepointlocations.upgrade.v01_00_002.upgrade"
+     profile="senaite.samplepointlocations:default"/>
+
 </configure>
 

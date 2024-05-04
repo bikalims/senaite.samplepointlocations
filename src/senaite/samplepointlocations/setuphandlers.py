@@ -4,6 +4,7 @@ from Products.CMFPlone.interfaces import INonInstallable
 from senaite.samplepointlocations import logger
 from senaite.samplepointlocations import PRODUCT_NAME
 from senaite.samplepointlocations import PROFILE_ID
+from senaite.samplepointlocations.permissions import setup_default_permissions
 from senaite.core.catalog import SETUP_CATALOG
 from senaite.core.setuphandlers import _run_import_step
 from senaite.core.setuphandlers import setup_other_catalogs
@@ -62,6 +63,7 @@ def setup_handler(context):
 
     # Apply ID format to content types
     setup_id_formatting(portal)
+    setup_default_permissions(portal)
 
     logger.info("{} setup handler [DONE]".format(PRODUCT_NAME.upper()))
 
