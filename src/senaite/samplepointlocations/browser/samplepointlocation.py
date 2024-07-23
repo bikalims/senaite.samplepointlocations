@@ -115,9 +115,9 @@ class SamplePointLocationView(ListingView):
         for sample_type in sample_types:
             type_titles.append(sample_type.Title())
         item["sample_types"] = type_titles
-        item["equipment_id"] = obj.EquipmentID
-        item["equipment_type"] = obj.EquipmentType
-        item["equipment_description"] = obj.EquipmentDescription
+        item["equipment_id"] = obj.equipment_id
+        item["equipment_type"] = obj.equipment_type
+        item["equipment_description"] = obj.equipment_description
         return item
 
     def get_fields(self):
