@@ -51,7 +51,7 @@ class ClientAwareReferenceWidgetVocabulary(CARWV):
             spl = context.getSamplePointLocation()
             samplepointlocation_uid = spl and api.get_uid(spl) or None
             if "SamplePoint" in self.get_portal_types(query):
-                query["getSamplePointLocationUID"] = [samplepointlocation_uid]
+                query["getSamplePointLocationUID"] = [samplepointlocation_uid, ""]
 
         return query
 
