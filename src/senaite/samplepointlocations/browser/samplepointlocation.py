@@ -101,7 +101,7 @@ class SamplePointLocationView(ListingView):
 
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
-        if hasattr(obj,'sample_point_id'):
+        if hasattr(obj, 'sample_point_id'):
             sample_point_id = obj.sample_point_id
             if sample_point_id:
                 item["replace"]["sample_point_id"] = get_link(
