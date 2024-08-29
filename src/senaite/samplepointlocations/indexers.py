@@ -45,10 +45,17 @@ def getBrainSamplePointLocation(instance):
 @indexer(ISamplePoint)
 def sp_location_uid(instance):
     sample_point_location = instance.sample_point_location
-    if len(sample_point_location) == 1:
-        return sample_point_location[0]
-    elif len(sample_point_location) == 2 and sample_point_location[1] == "":
-        return sample_point_location[0]
+    if sample_point_location:
+        if len(sample_point_location) == 1:
+            return sample_point_location[0]
+        elif len(sample_point_location) == 2 and sample_point_location[1] == "":
+            return sample_point_location[0]
+    else:
+        if instance.portal_type == "SamplePoint":
+            parent = instance.aq_parent
+            if parent.portal_type != "SamplePointLocation":
+                return
+            return parent.UID()
 
 
 @indexer(ISamplePointLocation)
