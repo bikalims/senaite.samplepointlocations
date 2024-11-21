@@ -217,8 +217,6 @@ def ajax_get_flush_settings(self):
         ],
         "Contact": [
         ],
-        "SampleType": [
-        ],
         "SamplePointLocation": [
         ],
         "PrimarySample": [
