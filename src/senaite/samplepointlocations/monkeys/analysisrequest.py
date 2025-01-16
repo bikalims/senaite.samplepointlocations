@@ -15,7 +15,7 @@ def get_record_metadata(self, record):
 
     keys = sorted(record.keys())
     for key in keys:
-        value =  record[key]
+        value = record[key]
         metadata_key = "{}_metadata".format(key.lower())
         metadata[metadata_key] = {}
 
@@ -100,6 +100,12 @@ def get_object_info(self, obj, key, record=None, client_metadata={}):
         # Get the info for each object
         info = callable(func) and func(obj) or self.get_base_info(obj)
 
+    # update query filters based on record values
+    func_name = "get_{}_queries".format(field_name.lower())
+    func = getattr(self, func_name, None)
+    if callable(func):
+        info["filter_queries"] = func(obj, record)
+
     # Check if there is any adapter to handle objects for this field
     for name, adapter in getAdapters((obj, ), IAddSampleObjectInfo):
         logger.info("adapter for '{}': {}".format(field_name, name))
@@ -113,28 +119,14 @@ def get_samplepointlocation_info(obj, info, client_uid, client_metadata={}):
     """Returns the client info of an object"""
 
     # catalog queries for UI field filtering
-    # location_uid = api.get_uid(obj)
-    sp_query = {
-        # "getSamplePointLocationUID": [location_uid, None],
-        # "getClientUID": [client_uid, ""],
-    }
-    sp_UIDs = []
-    for sample_point in obj.values():
-        if sample_point.portal_type == "SamplePoint":
-            sp_UIDs.append(sample_point.UID())
-    # catalog queries for UI field filtering
-    sp_query["UID"] = sp_UIDs
 
-    filter_queries = {
-        # Display Sample Points that have this sample type assigned plus
-        # those that do not have a sample type assigned
-        "SamplePoint": sp_query
-    }
-    info["filter_queries"] = filter_queries
     # update client_metadata info
     if client_metadata:
+        location_uid = obj.UID()
+        filter_queries = client_metadata["filter_queries"]
+        sp_query = filter_queries["SamplePoint"]
+        sp_query["getSamplePointLocationUID"] = [location_uid, ""]
         client_metadata["filter_queries"]["SamplePoint"] = sp_query
-
 
     def get_account_managers_emailaddreses(account_managers):
         emails = []
@@ -215,41 +207,6 @@ def get_client_info(self, obj):
         "CCEmails": {"value": obj.getCCEmails(), "if_empty": True}
     })
 
-    # UID of the client
-    uid = api.get_uid(obj)
-
-    # catalog queries for UI field filtering
-    filter_queries = {
-        "Contact": {
-            "getParentUID": [uid]
-        },
-        "CCContact": {
-            "getParentUID": [uid]
-        },
-        "SamplePoint": {
-            "getClientUID": [uid, ""],
-            # "getSamplePointLocationUID": [uid, ""],
-        },
-        "Template": {
-            "getClientUID": [uid, ""],
-        },
-        "Profiles": {
-            "getClientUID": [uid, ""],
-        },
-        "Specification": {
-            "getClientUID": [uid, ""],
-        },
-        "Sample": {
-            "getClientUID": [uid],
-        },
-        "Batch": {
-            "getClientUID": [uid, ""],
-        },
-        "SamplePointLocation": {
-            "getClientUID": [uid],
-        },
-    }
-    info["filter_queries"] = filter_queries
     return info
 
 
@@ -257,51 +214,14 @@ def ajax_get_flush_settings(self):
     """Returns the settings for fields flush"""
     flush_settings = {
         "Client": [
-            "Contact",
-            "CCContact",
-            "InvoiceContact",
-            "SamplePoint",
-            "Template",
-            "Profiles",
-            "PrimaryAnalysisRequest",
-            "Specification",
-            "Batch",
         ],
-        "Contact": ["CCContact"],
+        "Contact": [
+        ],
         "SamplePointLocation": [
-            "SamplePoint",
-            "SampleType",
-        ],
-        "SamplePoint": [
-            "SampleType",
-        ],
-        "SampleType": [
-            "Specification",
-            "Template",
         ],
         "PrimarySample": [
-            "Batch" "Client",
-            "Contact",
-            "CCContact",
-            "CCEmails",
-            "ClientOrderNumber",
-            "ClientReference",
-            "ClientSampleID",
-            "ContainerType",
-            "DateSampled",
             "EnvironmentalConditions",
-            "InvoiceContact",
-            "Preservation",
-            "Profiles",
-            "SampleCondition",
-            "SamplePoint",
-            "SampleType",
-            "SamplingDate",
-            "SamplingDeviation",
-            "StorageLocation",
-            "Specification",
-            "Template",
-        ],
+        ]
     }
 
     # Maybe other add-ons have additional fields that require flushing

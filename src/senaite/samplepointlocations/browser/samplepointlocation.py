@@ -43,7 +43,7 @@ class SamplePointLocationView(ListingView):
 
         self.columns = collections.OrderedDict(
             (
-                ("SamplePointId", dict(title=_("Sample Point ID"))),
+                ("sample_point_id", dict(title=_("Sample Point ID"))),
                 ("location_title", dict(title=_("Title"), index="Title")),
                 (
                     "sample_types",
@@ -101,10 +101,10 @@ class SamplePointLocationView(ListingView):
 
     def folderitem(self, obj, item, index):
         obj = api.get_object(obj)
-        if hasattr(obj,'SamplePointId'):
-            sample_point_id = obj.SamplePointId
+        if hasattr(obj, 'sample_point_id'):
+            sample_point_id = obj.sample_point_id
             if sample_point_id:
-                item["replace"]["SamplePointId"] = get_link(
+                item["replace"]["sample_point_id"] = get_link(
                     href=api.get_url(obj), value=sample_point_id
                 )
         item["replace"]["location_title"] = get_link(
@@ -115,9 +115,9 @@ class SamplePointLocationView(ListingView):
         for sample_type in sample_types:
             type_titles.append(sample_type.Title())
         item["sample_types"] = type_titles
-        item["equipment_id"] = obj.EquipmentID
-        item["equipment_type"] = obj.EquipmentType
-        item["equipment_description"] = obj.EquipmentDescription
+        item["equipment_id"] = obj.equipment_id
+        item["equipment_type"] = obj.equipment_type
+        item["equipment_description"] = obj.equipment_description
         return item
 
     def get_fields(self):

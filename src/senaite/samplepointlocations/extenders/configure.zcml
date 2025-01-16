@@ -1,8 +1,11 @@
 <configure xmlns:browser="http://namespaces.zope.org/browser"
            xmlns="http://namespaces.zope.org/zope"
+           xmlns:meta="http://namespaces.zope.org/meta"
+           xmlns:plone="http://namespaces.plone.org/plone"
            i18n_domain="senaite.samplepointlocations">
 
     <include package="archetypes.schemaextender"/>
+    <include package="plone.behavior" file="meta.zcml" />
 
     <adapter name='senaite.samplepointlocations.analysisrequest.schemaextender'
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
@@ -12,24 +15,29 @@
              provides="archetypes.schemaextender.interfaces.ISchemaModifier"
              factory=".analysisrequest.AnalysisRequestSchemaModifier" />
 
-    <adapter name="senaite.samplepointlocations.samplepoint.schemaextended"
-             provides="archetypes.schemaextender.interfaces.ISchemaExtender"
-             factory=".samplepoint.SamplePointSchemaExtender"/>
-
-    <adapter name="senaite.samplepointlocations.samplepoint.schemamodifier"
-             provides="archetypes.schemaextender.interfaces.ISchemaModifier"
-             factory=".samplepoint.SamplePointSchemaModifier"/>
 
     <adapter name="senaite.samplepointlocations.contact.schemaextended"
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
              factory=".contact.ContactSchemaExtender"/>
 
+     <subscriber
+           for="senaite.core.interfaces.ISamplePoint
+                zope.lifecycleevent.interfaces.IObjectAddedEvent"
+           handler=".samplepoint.handleObjectAdded"/>
+
     <subscriber
-            for="bika.lims.interfaces.ISamplePoint
-                 zope.lifecycleevent.interfaces.IObjectAddedEvent"
-            handler=".samplepoint.handleObjectAdded"/>
-    <subscriber
-            for="bika.lims.interfaces.ISamplePoint
-                 zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-            handler=".samplepoint.handleObjectModified"/>
+        for="senaite.core.interfaces.ISamplePoint
+             zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+        handler=".samplepoint.handleObjectModified"/>
+
+    <plone:behavior
+      title="Extended Sample Point"
+      name="extended_samplepoint"
+      description="Behavior to extend Sample Point for SamplePointLocation"
+      provides=".samplepoint.IExtendedSamplePoint"
+      factory=".samplepoint.ExtendedSamplePoint"
+      marker=".samplepoint.IExtendedSamplePointMarker"
+      />
+
+
 </configure>

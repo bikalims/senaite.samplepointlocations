@@ -15,18 +15,18 @@ from zope.interface import implementer
 INDEXES = [
     (SETUP_CATALOG, "getSamplePointLocation", "", "FieldIndex"),
     (SETUP_CATALOG, "getSamplePointLocationUID", "", "FieldIndex"),
-    ("portal_catalog", "getSamplePointLocationID", "", "FieldIndex"),
-    ("portal_catalog", "getAccountManagers", "", "KeywordIndex"),
-    ("portal_catalog", "getSamplePointID", "", "FieldIndex"),
+    (SETUP_CATALOG, "getSamplePointLocationID", "", "FieldIndex"),
+    (SETUP_CATALOG, "getAccountManagers", "", "KeywordIndex"),
+    (SETUP_CATALOG, "getSamplePointID", "", "FieldIndex"),
 ]
 
 # Tuples of (catalog, column_name)
 COLUMNS = [
     (SETUP_CATALOG, "getSamplePointLocation"),
     (SETUP_CATALOG, "getSamplePointLocationUID"),
-    ("portal_catalog", "getSamplePointLocationID"),
-    ("portal_catalog", "getAccountManagers"),
-    ("portal_catalog", "getSamplePointID"),
+    (SETUP_CATALOG, "getSamplePointLocationID"),
+    (SETUP_CATALOG, "getAccountManagers"),
+    (SETUP_CATALOG, "getSamplePointID"),
 ]
 
 NAVTYPES = []
@@ -64,6 +64,7 @@ def setup_handler(context):
     # Apply ID format to content types
     setup_id_formatting(portal)
     setup_default_permissions(portal)
+    # add_samplepoint_extras_behavior(portal)
 
     logger.info("{} setup handler [DONE]".format(PRODUCT_NAME.upper()))
 
@@ -230,3 +231,15 @@ class HiddenProfiles(object):
         return [
             "senaite.samplepointlocations:uninstall",
         ]
+
+
+def add_samplepoint_extras_behavior(context):
+    """Add ISamplePointExtras behavior to SamplePoint."""
+    type_name = 'SamplePoint'
+    behavior_name = 'senaite.samplepointlocations.extenders.samplepoint.IExtendedSamplePoint'
+
+    fti = api.get_tool('portal_types')[type_name]
+    behaviors = list(fti.behaviors)
+    if behavior_name not in behaviors:
+        behaviors.append(behavior_name)
+        fti.behaviors = tuple(behaviors)

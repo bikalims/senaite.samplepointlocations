@@ -1,190 +1,133 @@
-from archetypes.schemaextender.interfaces import IBrowserLayerAwareExtender
-from archetypes.schemaextender.interfaces import IOrderableSchemaExtender
-from archetypes.schemaextender.interfaces import ISchemaModifier
-from bika.lims import FieldEditContact
-from bika.lims import SETUP_CATALOG
-from bika.lims.interfaces import ISamplePoint
-from .fields import ExtStringField
-from collections import OrderedDict
-from Products.Archetypes.Widget import StringWidget
-from Products.CMFCore.permissions import View
-from senaite.samplepointlocations.extenders.fields import ExtReferenceField
-from senaite.samplepointlocations.interfaces import ISenaiteSamplePointLocationsLayer
+from Products.CMFPlone.utils import safe_hasattr
+from plone.autoform import directives
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.supermodel import model
+from zope import schema
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.component import adapter
+from zope.interface import provider
+
+from senaite.core.schema import UIDReferenceField
+from senaite.core.z3cform.widgets.uidreference import UIDReferenceWidgetFactory
+from senaite.core.catalog import SETUP_CATALOG
 from senaite.samplepointlocations import _
 from senaite.samplepointlocations import logger
 from senaite.samplepointlocations import is_installed
-from .utils import ClientAwareReferenceWidget
-from zope.component import adapts
-from zope.interface import implementer
 
-sample_point_id_field = ExtStringField(
-    "SamplePointId",
-    required=False,
-    mode="rw",
-    read_permission=View,
-    write_permission=FieldEditContact,
-    widget=StringWidget(
-        size=30,
-        label=_(u"Sample Point ID"),
-    ),
-)
 
-sample_point_location_field = ExtReferenceField(
-    "SamplePointLocation",
-    required=False,
-    allowed_types=("SamplePointLocation",),
-    relationship="SamplePointLocationLocation",
-    format="select",
-    mode="rw",
-    read_permission=View,
-    write_permission=FieldEditContact,
-    widget=ClientAwareReferenceWidget(
-        label=_(u"Sample Point Location"),
-        description=_(u"The location where the sample point can be found"),
-        render_own_label=False,
-        size=20,
-        catalog_name=SETUP_CATALOG,
-        base_query={
-            "is_active": True,
-            "sort_on": "sortable_title",
-            "sort_order": "ascending",
-        },
-        showOn=True,
-        visible={"edit": "hidden", "view": "hidden"},
-        ui_item="Title",
-        colModel=[
-            dict(columnName="UID", hidden=True),
-            dict(columnName="Title", width="60", label=_("Title")),
+class IExtendedSamplePointMarker(Interface):
+    pass
+
+
+@provider(IFormFieldProvider)
+class IExtendedSamplePoint(model.Schema):
+    """
+    Extended Page content type schema with an extra field
+    """
+
+    sample_point_id = schema.TextLine(
+        title=_("Sample Point ID"),
+        required=False,
+    )
+    directives.widget(
+        "sample_point_location",
+        UIDReferenceWidgetFactory,
+        catalog=SETUP_CATALOG,
+        query={"sort_on": "title", },
+        display_template="<a href='${url}'>${title}</a>",
+        columns=[
+            {
+                "name": "title",
+                "width": "30",
+                "align": "left",
+                "label": _(u"Title"),
+            },
         ],
-    ),
-)
-
-equipment_id_field = ExtStringField(
-    "EquipmentID",
-    required=False,
-    mode="rw",
-    read_permission=View,
-    write_permission=FieldEditContact,
-    widget=StringWidget(
-        label=_(u"Equipment ID"),
+        limit=4,
+    )
+    sample_point_location = UIDReferenceField(
+        title=_(u"Sample Point Location"),
+        allowed_types=("SamplePointLocation",),
+        multi_valued=False,
+        description=_(u"The location where the sample point can be found"),
+        required=False,
+    )
+    equipment_id = schema.TextLine(
+        title=_("Equipment ID"),
         description=_(u"The equipment id used on the sample point"),
-    ),
-)
-
-equipment_type_field = ExtStringField(
-    "EquipmentType",
-    required=False,
-    mode="rw",
-    read_permission=View,
-    write_permission=FieldEditContact,
-    widget=StringWidget(
-        label=_(u"Equipment Type"),
+        required=False,
+    )
+    equipment_type = schema.TextLine(
+        title=_("Equipment Type"),
         description=_(u"The equipment type used on the sample point"),
-    ),
-)
-
-equipment_description_field = ExtStringField(
-    "EquipmentDescription",
-    required=False,
-    mode="rw",
-    read_permission=View,
-    write_permission=FieldEditContact,
-    widget=StringWidget(
-        label=_(u"Equipment Description"),
-    ),
-)
+        required=False,
+    )
+    equipment_description = schema.TextLine(
+        title=_("Equipment Description"),
+        description=_(u"The equipment type used on the sample point"),
+        required=False,
+    )
 
 
-@implementer(IOrderableSchemaExtender, IBrowserLayerAwareExtender)
-class SamplePointSchemaExtender(object):
-    adapts(ISamplePoint)
-    layer = ISenaiteSamplePointLocationsLayer
-
-    fields = [
-        sample_point_id_field,
-        sample_point_location_field,
-        equipment_id_field,
-        equipment_type_field,
-        equipment_description_field
-    ]
-
+@implementer(IExtendedSamplePoint)
+@adapter(IExtendedSamplePointMarker)
+class ExtendedSamplePoint(object):
     def __init__(self, context):
         self.context = context
 
-    def getOrder(self, schematas):
-        # return schematas
-        result = OrderedDict(
-            [
-                (
-                    "default",
-                    [
-                        "SamplePointId",
-                        "id",
-                        "title",
-                        "allowDiscussion",
-                        "subject",
-                        "description",
-                        "SamplePointLocation",
-                        "location",
-                        "contributors",
-                        "creators",
-                        "effectiveDate",
-                        "expirationDate",
-                        "language",
-                        "rights",
-                        "creation_date",
-                        "modification_date",
-                        "EquipmentID",
-                        "EquipmentType",
-                        "EquipmentDescription",
-                        "SamplingFrequency",
-                        "SampleTypes",
-                        "Composite",
-                        "Latitude",
-                        "Longitude",
-                        "Elevation",
-                        "AttachmentFile",
-                    ],
-                )
-            ]
-        )
-        return result
+    @property
+    def sample_point_id(self):
+        if safe_hasattr(self.context, 'sample_point_id'):
+            return self.context.sample_point_id
+        return None
 
-    def getFields(self):
-        return self.fields
+    @sample_point_id.setter
+    def sample_point_id(self, value):
+        self.context.sample_point_id = value
 
+    @property
+    def equipment_id(self):
+        if safe_hasattr(self.context, 'equipment_id'):
+            return self.context.equipment_id
+        return None
 
-@implementer(ISchemaModifier, IBrowserLayerAwareExtender)
-class SamplePointSchemaModifier(object):
-    """Change Schema Fields"""
+    @equipment_id.setter
+    def equipment_id(self, value):
+        self.context.equipment_id = value
 
-    adapts(ISamplePoint)
-    layer = ISenaiteSamplePointLocationsLayer
+    @property
+    def equipment_type(self):
+        if safe_hasattr(self.context, 'equipment_type'):
+            return self.context.equipment_type
+        return None
 
-    def __init__(self, context):
-        self.context = context
+    @equipment_type.setter
+    def equipment_type(self, value):
+        self.context.equipment_type = value
 
-    def _get_parent_location(self):
-        parent = self.context
-        while True:
-            if parent.portal_type == "SamplePointLocation":
-                return parent.UID()
-            parent = parent.aq_parent
+    @property
+    def equipment_description(self):
+        if safe_hasattr(self.context, 'equipment_description'):
+            return self.context.equipment_description
+        return None
 
-    def fiddle(self, schema):
-        for field in schema.fields():
-            field.schemata = "default"
-        return schema
+    @equipment_description.setter
+    def equipment_description(self, value):
+        self.context.equipment_description = value
 
 
 def handleObjectAdded(obj, event):
     if obj.isTemporary():
         return
     if obj.portal_type == "SamplePoint":
-        obj.setSamplePointLocation(obj.aq_parent)
+        parent = obj.aq_parent
+        if parent.portal_type != "SamplePointLocation":
+            return
+        obj.sample_point_location = [parent.UID()]
         logger.info(
             "handleObjectAdded: {} -> {}".format(
-                obj.getSamplePointLocation().Title(), obj.aq_parent.Title()
+                parent.Title(), obj.Title()
             )
         )
 
@@ -193,9 +136,12 @@ def handleObjectModified(obj, event):
     if not is_installed():
         return
     if obj.portal_type == "SamplePoint":
-        obj.setSamplePointLocation(obj.aq_parent)
+        parent = obj.aq_parent
+        if parent.portal_type != "SamplePointLocation":
+            return
+        obj.sample_point_location = [parent.UID()]
         logger.info(
             "handleObjectModified: {} -> {}".format(
-                obj.getSamplePointLocation().Title(), obj.aq_parent.Title()
+                parent.Title(), obj.Title()
             )
         )
