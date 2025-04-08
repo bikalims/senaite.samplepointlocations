@@ -1,6 +1,6 @@
 import collections
 from bika.lims import api
-from bika.lims.api import safe_unicode as su
+from bika.lims.api import to_utf8
 from bika.lims.utils import get_link
 from senaite.app.listing import ListingView
 from senaite.core.catalog import SETUP_CATALOG
@@ -103,16 +103,16 @@ class SamplePointLocationsView(ListingView):
         if obj.address and len(obj.address) > 0:
             address = obj.address[0]
             if address.get("address"):
-                address_lst.append(su(address["address"]).unicode("utf-8"))
+                address_lst.append(to_utf8(address["address"]))
             if address.get("city"):
-                address_lst.append(su(address["city"]).unicode("utf-8"))
+                address_lst.append(to_utf8(address["city"]))
             if address.get("zip"):
-                address_lst.append(su(address["zip"]).unicode("utf-8"))
+                address_lst.append(to_utf8(address["zip"]))
             if address.get("subdivision1"):
                 address_lst.append(
-                    su(address["subdivision1"]).unicode("utf-8"))
+                    to_utf8(address["subdivision1"]))
             if address.get("country"):
-                address_lst.append(su(address["country"]).unicode("utf-8"))
+                address_lst.append(to_utf8(address["country"]))
         if address_lst:
             item["replace"]["location_address"] = get_link(
                 href=api.get_url(obj), value=", ".join(address_lst)
