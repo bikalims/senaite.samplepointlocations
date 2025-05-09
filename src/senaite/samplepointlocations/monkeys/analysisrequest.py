@@ -1,6 +1,6 @@
 from bika.lims.interfaces import IAddSampleFieldsFlush
 from bika.lims.interfaces import IAddSampleObjectInfo
-from senaite import api
+from bika.lims import api
 from senaite.samplepointlocations import check_installed
 from senaite.samplepointlocations import logger
 from zope.component import getAdapters

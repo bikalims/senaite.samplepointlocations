@@ -10,7 +10,7 @@ from senaite.core.schema import AddressField
 from senaite.core.schema import UIDReferenceField
 from senaite.core.schema.addressfield import PHYSICAL_ADDRESS
 from senaite.core.z3cform.widgets.uidreference import UIDReferenceWidgetFactory
-from senaite import api
+from bika.lims import api
 from senaite.samplepointlocations import _
 from zope.interface import implementer
 from zope.schema import TextLine

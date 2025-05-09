@@ -3,7 +3,7 @@
 from AccessControl.Permission import addPermission
 from AccessControl.SecurityInfo import ModuleSecurityInfo
 import logging
-from senaite.api import get_request
+from bika.lims.api import get_request
 from senaite.samplepointlocations.interfaces import ISenaiteSamplePointLocationsLayer
 from senaite.samplepointlocations import permissions
 from zope.i18nmessageid import MessageFactory

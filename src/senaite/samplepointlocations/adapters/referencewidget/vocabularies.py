@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from bika.lims.utils import get_client
-from senaite import api
+from bika.lims import api
 from senaite.core.adapters.referencewidget.vocabularies import (
     ClientAwareReferenceWidgetVocabulary as CARWV)
 
