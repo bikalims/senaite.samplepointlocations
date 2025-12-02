@@ -64,7 +64,7 @@ def setup_handler(context):
     # Apply ID format to content types
     setup_id_formatting(portal)
     setup_default_permissions(portal)
-    # add_samplepoint_extras_behavior(portal)
+    add_samplepoint_extras_behavior(portal)
 
     logger.info("{} setup handler [DONE]".format(PRODUCT_NAME.upper()))
 
