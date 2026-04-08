@@ -33,7 +33,7 @@ and then running ``bin/buildout``
 
 #### Docker (Recommended for Ingwe Bika LIMS 4)
 
-Add senaite.receivedemail to your custom add-ons list in the Docker-based Ingwe Bika distribution.
+Add senaite.samplepointlocations to your custom add-ons list in the Docker-based Ingwe Bika distribution.
 
 ### License
 This project is licensed under the GNU General Public License v2.0 (GPL-2.0).
