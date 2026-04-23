@@ -120,7 +120,7 @@ def get_samplepointlocation_info(obj, info, client_uid, client_metadata={}):
 
     # catalog queries for UI field filtering
 
-    import pdb; pdb.set_trace()
+    # update client_metadata info
     if client_metadata:
         location_uid = obj.UID()
         filter_queries = client_metadata["filter_queries"]
