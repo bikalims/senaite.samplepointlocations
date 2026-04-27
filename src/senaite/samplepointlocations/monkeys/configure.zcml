@@ -26,6 +26,14 @@
     order="1020" />
 
   <monkey:patch
+    description="Include SamplePointLocation query in get_client_queries"
+    class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
+    original="get_sampletype_queries"
+    ignoreOriginal="True"
+    replacement=".analysisrequest.get_sampletype_queries"
+    order="1020" />
+
+  <monkey:patch
     description="Include Location get_objects_info"
     class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
     original="get_objects_info"
