@@ -228,17 +228,20 @@ def get_sampletype_queries(self, obj, record=None):
     the SampleType object and record
     """
     uid = api.get_uid(obj)
+    record = record or {}
     spl_uid = ""
-    sample_point_location = record["SamplePointLocation"]
+    sample_point_location = record.get("SamplePointLocation")
     if sample_point_location:
         spl_uid = api.get_uid(sample_point_location)
+    sample_point_query = {
+        "sampletype_uid": [uid, ""],
+    }
+    if spl_uid:
+        sample_point_query["getSamplePointLocationUID"] = [spl_uid, ""]
     queries = {
         # Display Sample Points that have this sample type assigned plus
         # those that do not have a sample type assigned
-        "SamplePoint": {
-            "sampletype_uid": [uid, ""],
-            "getSamplePointLocationUID": [spl_uid, ""]
-        },
+        "SamplePoint": sample_point_query,
         # Display Analysis Profiles that have this sample type assigned
         # in addition to those that do not have a sample profile assigned
         "Profiles": {
@@ -256,7 +259,6 @@ def get_sampletype_queries(self, obj, record=None):
     }
 
     # additional filters by client
-    record = record if record else {}
     client = record.get("Client") or self.get_client()
     client_uid = api.get_uid(client) if client else None
     if client_uid:
