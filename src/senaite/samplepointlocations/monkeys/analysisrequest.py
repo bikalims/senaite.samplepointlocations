@@ -157,8 +157,6 @@ def get_samplepoint_info(obj, info, client_uid):
             # Display Sample Points that have this sample type assigned plus
             # those that do not have a sample type assigned
             "SampleType": st_query,
-            "SamplePointLocation": obj.aq_parent.UID(),
-            "getSamplePointLocationUID": obj.aq_parent.UID()
         }
         info["filter_queries"] = filter_queries
     if len(UIDs) == 1:
