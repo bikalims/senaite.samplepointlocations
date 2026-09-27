@@ -12,7 +12,7 @@
 
   <monkey:patch
     description="Get AR location"
-    class="bika.lims.content.analysisrequest.AnalysisRequest"
+    class="bika.lims.browser.analysisrequest.add2.ajaxAnalysisRequestAddView"
     original="get_samplepointlocation_queries"
     ignoreOriginal="True"
     replacement=".analysisrequest.get_samplepointlocation_queries" />
@@ -76,4 +76,3 @@
     />
 
 </configure>
-

@@ -94,7 +94,7 @@ def get_object_info(self, obj, key, record=None, client_metadata={}):
         info = self.get_base_info(obj)
         client = self.get_client()
         client_uid = client and api.get_uid(client) or ""
-        info = get_samplepoint_info(obj, info, client_uid)
+        info = get_samplepoint_info(obj, info, client_uid, record=record)
     else:
         func = getattr(self, func_name, None)
         # Get the info for each object
@@ -116,18 +116,7 @@ def get_object_info(self, obj, key, record=None, client_metadata={}):
 
 
 def get_samplepointlocation_info(obj, info, client_uid, client_metadata={}):
-    """Returns the client info of an object"""
-
-    # catalog queries for UI field filtering
-
-    # update client_metadata info
-    if client_metadata:
-        location_uid = obj.UID()
-        filter_queries = client_metadata["filter_queries"]
-        sp_query = {}
-        sp_query["getSamplePointLocationUID"] = [location_uid, ""]
-        client_metadata["filter_queries"]["SamplePoint"] = sp_query
-        info["filter_queries"] = client_metadata["filter_queries"]
+    """Return the location's default CC email addresses."""
 
     def get_account_managers_emailaddreses(account_managers):
         emails = []
@@ -143,8 +132,18 @@ def get_samplepointlocation_info(obj, info, client_uid, client_metadata={}):
     return info
 
 
-def get_samplepoint_info(obj, info, client_uid):
-    """Returns the client info of an object"""
+def get_samplepoint_info(obj, info, client_uid, record=None):
+    """Return point defaults without restricting a location's sample types."""
+
+    location = None
+    location_uids = getattr(obj, "sample_point_location", None) or []
+    if api.is_string(location_uids):
+        location_uids = [location_uids]
+    if location_uids:
+        location = api.get_object_by_uid(location_uids[0])
+    if not location and obj.aq_parent.portal_type == "SamplePointLocation":
+        location = obj.aq_parent
+    location_selected = bool(location or (record or {}).get("SamplePointLocation"))
 
     UIDs = []
     for sample_type in obj.getSampleTypes():
@@ -152,10 +151,9 @@ def get_samplepoint_info(obj, info, client_uid):
     # catalog queries for UI field filtering
     st_query = {"UID": UIDs}
 
-    if UIDs:
+    if UIDs and not location_selected:
         filter_queries = {
-            # Display Sample Points that have this sample type assigned plus
-            # those that do not have a sample type assigned
+            # Retain type filtering for points outside a selected location.
             "SampleType": st_query,
         }
         info["filter_queries"] = filter_queries
@@ -163,11 +161,13 @@ def get_samplepoint_info(obj, info, client_uid):
         sample_uid = UIDs[0]
         sample_title = api.get_object_by_uid(sample_uid).Title()
         info["field_values"].update(
-            {"SampleType": {"uid": sample_uid, "title": sample_title}}
+            {"SampleType": {"uid": sample_uid, "title": sample_title,
+                            "if_empty": location_selected}}
         )
-    info["field_values"].update(
-        {"SamplePointLocation": {"uid": obj.aq_parent.UID(), "title": obj.aq_parent.title}}
-    )
+    if location:
+        info["field_values"]["SamplePointLocation"] = {
+            "uid": api.get_uid(location), "title": location.Title(),
+            "if_empty": True}
 
     return info
 
@@ -208,9 +208,8 @@ def get_client_queries(self, obj, record=None):
         "SamplePointLocation": {
             "getClientUID": [uid, ""],
             },
-        "getSamplePointLocationUID": {
-            "getClientUID": [uid, ""],
-            },
+        "SamplePoint": get_samplepoint_query(
+            self, record, client=obj),
     }
 
     # additional filtering by sample type
@@ -228,8 +227,8 @@ def get_sampletype_queries(self, obj, record=None):
     the SampleType object and record
     """
     uid = api.get_uid(obj)
-    record = record or {}
     queries = {
+        "SamplePoint": get_samplepoint_query(self, record, sample_type=obj),
         # Display Analysis Profiles that have this sample type assigned
         # in addition to those that do not have a sample profile assigned
         "Profiles": {
@@ -259,19 +258,30 @@ def get_sampletype_queries(self, obj, record=None):
 
 def get_samplepointlocation_queries(self, obj, record=None):
     """Returns the filter queries to apply to other fields based on both
-    the SamplePoint object and record
+    the SamplePointLocation object and record
     """
-    uid = api.get_uid(obj)
-    queries = {
-        # Display Sample Points that have this sample type assigned plus
-        # those that do not have a sample type assigned
-        "SamplePoint": {
-            # "getParentUID": [uid, ""],
-            "getSamplePointLocationUID":[uid, ""]
-        },
-    }
+    return {"SamplePoint": get_samplepoint_query(self, record, location=obj)}
 
-    return queries
+
+def get_samplepoint_query(self, record=None, client=None, sample_type=None,
+                         location=None):
+    """Use location in preference to sample type for sample point selection.
+
+    Every metadata source must supply the same complete query: the add form
+    replaces the widget query and validates the selected point on each update.
+    """
+    record = record or {}
+    query = {}
+    location = location or record.get("SamplePointLocation")
+    sample_type = sample_type or record.get("SampleType")
+    if location:
+        query["getSamplePointLocationUID"] = [api.get_uid(location), ""]
+    elif sample_type:
+        query["sampletype_uid"] = [api.get_uid(sample_type), ""]
+    client = client or record.get("Client") or self.get_client()
+    if client:
+        query["getClientUID"] = [api.get_uid(client), ""]
+    return query
 
 
 
