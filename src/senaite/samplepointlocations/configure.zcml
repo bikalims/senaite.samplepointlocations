@@ -24,6 +24,7 @@
   <include file="indexers.zcml" />
   <include file="permissions.zcml" />
   <include package=".extenders"/>
+  <include package=".adapters"/>
   <include package=".monkeys" />
   <include package=".upgrade" />
 

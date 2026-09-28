@@ -8,10 +8,30 @@
        client-bound reference fields -->
   <adapter
       for="senaite.samplepointlocations.content.samplepointlocation.ISamplePointLocation
-           zope.publisher.interfaces.browser.IBrowserRequest"
+           senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"
       factory="senaite.samplepointlocations.adapters.referencewidget.vocabularies.ClientAwareReferenceWidgetVocabulary"
+      provides="senaite.core.interfaces.IReferenceWidgetVocabulary" />
+
+  <adapter
+      for="bika.lims.interfaces.IClient
+           senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"
+      factory=".referencewidget.vocabularies.ClientAwareReferenceWidgetVocabulary"
+      provides="senaite.core.interfaces.IReferenceWidgetVocabulary" />
+  <adapter
+      for="bika.lims.interfaces.IAnalysisRequest
+           senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"
+      factory=".referencewidget.vocabularies.ClientAwareReferenceWidgetVocabulary"
+      provides="senaite.core.interfaces.IReferenceWidgetVocabulary" />
+  <adapter
+      for="bika.lims.interfaces.IBatch
+           senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"
+      factory=".referencewidget.vocabularies.ClientAwareReferenceWidgetVocabulary"
+      provides="senaite.core.interfaces.IReferenceWidgetVocabulary" />
+  <adapter
+      for="zope.interface.Interface
+           senaite.samplepointlocations.interfaces.ISenaiteSamplePointLocationsLayer"
+      factory=".referencewidget.vocabularies.ClientAwareReferenceWidgetVocabulary"
       provides="senaite.core.interfaces.IReferenceWidgetVocabulary" />
 
 
 </configure>
-

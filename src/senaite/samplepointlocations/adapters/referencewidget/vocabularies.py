@@ -3,6 +3,8 @@ from bika.lims.utils import get_client
 from bika.lims import api
 from senaite.core.adapters.referencewidget.vocabularies import (
     ClientAwareReferenceWidgetVocabulary as CARWV)
+from senaite.core.adapters.referencewidget.vocabularies import (
+    DefaultReferenceWidgetVocabulary)
 
 
 class ClientAwareReferenceWidgetVocabulary(CARWV):
@@ -29,29 +31,34 @@ class ClientAwareReferenceWidgetVocabulary(CARWV):
         """Returns the raw query to use for current search, based on the
         base query + update query
         """
-        query = super(
-            ClientAwareReferenceWidgetVocabulary, self).get_raw_query()
+        query = DefaultReferenceWidgetVocabulary.get_raw_query(self)
 
-        context = self.context
-        if self.is_client_aware(query):
+        portal_types = self.get_portal_types(query)
+        if not set(portal_types).intersection(("SamplePointLocation", "SamplePoint")):
+            return super(ClientAwareReferenceWidgetVocabulary, self).get_raw_query()
 
-            client = get_client(self.context)
-            client_uid = client and api.get_uid(client) or None
+        field_name = self.request.get("field_name", "") or ""
+        name, separator, column = field_name.rpartition("-")
+        is_sample_add = name in ("SamplePoint", "SamplePointLocation") and column.isdigit()
+        client = get_client(self.context)
+        if client and "getClientUID" not in query:
+            query["getClientUID"] = [api.get_uid(client), ""]
 
-            if client_uid:
-                # Apply the search criteria for this client
-                if "Contact" in self.get_portal_types(query):
-                    query["getParentUID"] = [client_uid]
-                else:
-                    query["getClientUID"] = [client_uid, ""]
+        if "SamplePointLocation" in portal_types:
+            if is_sample_add and "getClientUID" not in query and "UID" not in query:
+                query["UID"] = ""
 
-        if self.is_samplepointlocation_aware(query):
-            if not hasattr(context, "getSamplePointLocation"):
-                return query
-            spl = context.getSamplePointLocation()
-            samplepointlocation_uid = spl and api.get_uid(spl) or None
-            if "SamplePoint" in self.get_portal_types(query):
-                query["getSamplePointLocationUID"] = [samplepointlocation_uid, ""]
+        if "SamplePoint" in portal_types:
+            # The unsaved form's explicit query takes precedence over context.
+            if "getSamplePointLocationUID" not in query and "UID" not in query:
+                getter = getattr(self.context, "getSamplePointLocation", None)
+                location = getter() if callable(getter) else None
+                if location:
+                    query["getSamplePointLocationUID"] = api.get_uid(location)
+                elif is_sample_add:
+                    query["UID"] = ""
+            if is_sample_add:
+                query.pop("sampletype_uid", None)
 
         return query
 
