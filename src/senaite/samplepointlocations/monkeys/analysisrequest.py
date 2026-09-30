@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from bika.lims.interfaces import IAddSampleFieldsFlush
 from bika.lims.interfaces import IAddSampleObjectInfo
 from bika.lims import api
@@ -84,21 +86,22 @@ def get_object_info(self, obj, key, record=None, client_metadata={}):
     if record is None:
         record = {}
 
-    # Get the info for each object
+    # Core caches object info by UID, shared by every sample column. Copy it
+    # before adding record-specific queries or modifying nested field values.
     if func_name == "get_samplepointlocation_info":
-        info = self.get_base_info(obj)
+        info = deepcopy(self.get_base_info(obj))
         client = self.get_client()
         client_uid = client and api.get_uid(client) or ""
         info = get_samplepointlocation_info(obj, info, client_uid, client_metadata=client_metadata)
     elif func_name == "get_samplepoint_info":
-        info = self.get_base_info(obj)
+        info = deepcopy(self.get_base_info(obj))
         client = self.get_client()
         client_uid = client and api.get_uid(client) or ""
         info = get_samplepoint_info(obj, info, client_uid, record=record)
     else:
         func = getattr(self, func_name, None)
         # Get the info for each object
-        info = callable(func) and func(obj) or self.get_base_info(obj)
+        info = deepcopy(callable(func) and func(obj) or self.get_base_info(obj))
 
     # update query filters based on record values
     func_name = "get_{}_queries".format(field_name.lower())
@@ -112,11 +115,9 @@ def get_object_info(self, obj, key, record=None, client_metadata={}):
         ad_info = adapter.get_object_info_with_record(record)
         self.update_object_info(info, ad_info)
 
-    if field_name in ("Client", "SamplePointLocation", "SamplePoint", "SampleType"):
-        selected = dict(record)
-        selected[field_name] = api.get_uid(obj)
-        info.setdefault("filter_queries", {}).update(
-            get_cascade_queries(self, selected))
+    # Only update downstream fields. Reapplying upstream (or self) queries
+    # starts asynchronous validation against a possibly stale form record,
+    # which can clear a point/type that has just been selected.
 
     return info
 
@@ -146,12 +147,7 @@ def get_samplepoint_info(obj, info, client_uid, record=None):
         UIDs.append(sample_type.UID())
     # catalog queries for UI field filtering
     st_query = {"UID": UIDs}
-
-    if UIDs:
-        filter_queries = {
-            "SampleType": st_query,
-        }
-        info["filter_queries"] = filter_queries
+    info["filter_queries"] = {"SampleType": st_query if UIDs else {}}
     if len(UIDs) == 1:
         sample_uid = UIDs[0]
         sample_title = api.get_object_by_uid(sample_uid).Title()
@@ -314,7 +310,7 @@ def get_objects_info(self, record, key, client_metadata):
 def get_client_info(self, obj):
     """Returns the client info of an object
     """
-    info = self.get_base_info(obj)
+    info = deepcopy(self.get_base_info(obj))
 
     # Set the default contact, but only if empty. The Contact field is
     # flushed each time the Client changes, so we can assume that if there
@@ -339,12 +335,12 @@ def ajax_get_flush_settings(self):
     """Returns the settings for fields flush"""
     flush_settings = {
         "Client": [
-            "SamplePointLocation", "SamplePoint", "SampleType",
+
         ],
         "Contact": [
         ],
         "SamplePointLocation": [
-            "SamplePoint", "SampleType",
+            "SamplePoint",
         ],
         "SamplePoint": ["SampleType"],
         "PrimarySample": [

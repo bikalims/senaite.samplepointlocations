@@ -20,6 +20,14 @@ class AddView(object):
     get_client_queries = add.get_client_queries
     get_sampletype_queries = add.get_sampletype_queries
     get_samplepointlocation_queries = add.get_samplepointlocation_queries
+    get_object_info = add.get_object_info
+
+    def get_base_info(self, obj):
+        return {"uid": add.api.get_uid(obj), "field_values": {}}
+
+    def update_object_info(self, info, additional):
+        for key in ("field_values", "filter_queries"):
+            info.setdefault(key, {}).update(additional.get(key, {}))
 
     def get_client(self):
         return CLIENT
@@ -64,6 +72,26 @@ class SamplePointQueriesTest(unittest.TestCase):
         for queries in sources:
             self.assertEqual(self.matches(queries["SamplePoint"]), ["point"])
             self.assertEqual(queries["SamplePoint"], sources[0]["SamplePoint"])
+
+    def test_empty_column_cannot_overwrite_selected_column_location(self):
+        cached = {"uid": CLIENT, "field_values": {}, "filter_queries": {}}
+        self.view.get_base_info = lambda obj: cached
+        selected = self.view.get_object_info(CLIENT, "Client", self.record)
+        empty = self.view.get_object_info(CLIENT, "Client", {"Client": CLIENT})
+        self.assertEqual(selected["filter_queries"]["SamplePoint"],
+                         {"getSamplePointLocationUID": LOCATION,
+                          "getClientUID": [CLIENT, ""]})
+        self.assertEqual(empty["filter_queries"]["SamplePoint"]["UID"], "")
+        self.assertEqual(cached["filter_queries"], {})
+
+    def test_cached_field_values_are_not_shared_between_columns(self):
+        cached = {"uid": CLIENT, "field_values": {"Nested": {"value": []}},
+                  "filter_queries": {}}
+        self.view.get_base_info = lambda obj: cached
+        first = self.view.get_object_info(CLIENT, "Client", self.record)
+        first["field_values"]["Nested"]["value"].append("first column")
+        second = self.view.get_object_info(CLIENT, "Client", self.record)
+        self.assertEqual(second["field_values"]["Nested"]["value"], [])
 
     def test_clearing_location_empties_points(self):
         self.record["SamplePointLocation"] = ""
@@ -195,6 +223,26 @@ class SamplePointMetadataTest(unittest.TestCase):
         add.api.get_object_by_uid = lambda uid: self.point
         query = add.get_cascade_queries(AddView(), {"SamplePoint": LOCATION})
         self.assertEqual(query["SampleType"], {})
+
+    def test_type_metadata_does_not_revalidate_point_or_type(self):
+        # The form record can still contain the previous point during a change.
+        info = AddView().get_object_info(self.sample_type, "SampleType",
+                                        {"SamplePoint": ""})
+        self.assertNotIn("SamplePoint", info["filter_queries"])
+        self.assertNotIn("SampleType", info["filter_queries"])
+        self.assertNotIn("SamplePointLocation", info["filter_queries"])
+
+    def test_point_metadata_only_filters_types_with_stale_record(self):
+        self.point.UID = lambda: LOCATION
+        info = AddView().get_object_info(self.point, "SamplePoint",
+                                        {"SamplePointLocation": "",
+                                         "SamplePoint": ""})
+        self.assertEqual(info["filter_queries"], {"SampleType": {"UID": [OTHER]}})
+
+    def test_unrestricted_point_resets_previous_type_query(self):
+        self.point.getSampleTypes = lambda: []
+        info = add.get_samplepoint_info(self.point, self.info, CLIENT)
+        self.assertEqual(info["filter_queries"], {"SampleType": {}})
 
 
 class Vocabulary(vocabularies.ClientAwareReferenceWidgetVocabulary):
