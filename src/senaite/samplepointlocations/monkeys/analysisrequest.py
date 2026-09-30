@@ -4,8 +4,17 @@ from bika.lims.interfaces import IAddSampleFieldsFlush
 from bika.lims.interfaces import IAddSampleObjectInfo
 from bika.lims import api
 from senaite.samplepointlocations import check_installed
+from senaite.samplepointlocations import is_installed
 from senaite.samplepointlocations import logger
 from zope.component import getAdapters
+
+
+def get_sample_points_query(self):
+    """Remove reverse type filtering from the widget's validation baseline."""
+    query = dict(self._old_get_sample_points_query())
+    if is_installed():
+        query.pop("sampletype_uid", None)
+    return query
 
 
 def get_record_metadata(self, record):

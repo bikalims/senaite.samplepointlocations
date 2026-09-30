@@ -66,6 +66,25 @@ class SamplePointQueriesTest(unittest.TestCase):
                          [SAMPLE_TYPE, ""])
         self.assertEqual(queries["Specification"]["sampletype_uid"], SAMPLE_TYPE)
 
+    def test_widget_baseline_allows_point_with_assigned_type(self):
+        original = add.is_installed
+        add.is_installed = lambda: True
+        self.addCleanup(setattr, add, "is_installed", original)
+        baseline = {"sampletype_uid": ["", ""]}
+        self.view._old_get_sample_points_query = lambda: baseline
+        query = add.get_sample_points_query(self.view)
+        query.update(add.get_samplepoint_query(self.view, self.record))
+        self.assertEqual(self.matches(query), ["point"])
+        self.assertEqual(baseline, {"sampletype_uid": ["", ""]})
+
+    def test_widget_baseline_preserves_core_filter_without_addon(self):
+        original = add.is_installed
+        add.is_installed = lambda: False
+        self.addCleanup(setattr, add, "is_installed", original)
+        baseline = {"sampletype_uid": [SAMPLE_TYPE, ""]}
+        self.view._old_get_sample_points_query = lambda: baseline
+        self.assertEqual(add.get_sample_points_query(self.view), baseline)
+
     def test_all_metadata_sources_allow_same_points(self):
         sources = [self.view.get_client_queries(CLIENT, self.record),
                    self.view.get_samplepointlocation_queries(LOCATION, self.record)]

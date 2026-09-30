@@ -4,6 +4,13 @@
     i18n_domain="senaite.samplepointlocations">
 
   <monkey:patch
+    description="Keep Sample Point base query independent of Sample Type"
+    class="bika.lims.content.analysisrequest.AnalysisRequest"
+    original="get_sample_points_query"
+    preserveOriginal="True"
+    replacement=".analysisrequest.get_sample_points_query" />
+
+  <monkey:patch
     description="Get AR location"
     class="bika.lims.content.analysisrequest.AnalysisRequest"
     original="getSamplePointLocation"
